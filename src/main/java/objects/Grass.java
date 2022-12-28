@@ -13,6 +13,6 @@ public class Grass {
 
     @Override
     public String toString() {
-        return new String("*");
+        return "*";
     }
 }

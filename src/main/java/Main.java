@@ -1,3 +1,4 @@
+import maps.AbstractWorldMap;
 import objects.Grass;
 import objects.Vector2d;
 
@@ -11,10 +12,11 @@ import static java.lang.System.setOut;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Map<Vector2d, Grass> hashedGrass = new HashMap<>();
-        hashedGrass.put(new Vector2d(2, 2), new Grass(new Vector2d(2, 2)));
-        hashedGrass.put(new Vector2d(2, 2), new Grass(new Vector2d(2, 2)));
-        Grass a = hashedGrass.get(new Vector2d(2, 2));
-        out.println(a);
+        AbstractWorldMap map = new AbstractWorldMap(20, 10, 0,
+                25, 2, 10, 0,
+                100, 2, 50, 70, 20,
+                10, 0, 2, 0);
+
+        out.println(map);
     }
 }

@@ -4,8 +4,7 @@ import objects.Animal;
 
 import java.util.Comparator;
 
-public class AnimalCompare {
-
+public class AnimalCompare{
     public static int compare(Object a, Object b) {
         if (a == b)
             return 0;
