@@ -17,6 +17,7 @@ public class Animal {
     private final List<Integer> genome;
     private int genomeIndex;
     private final AbstractWorldMap map;
+    private int childCount = 0;
 
     public Animal(Vector2d pos_, int maxHealth_, int currHealth_, int birthDate_, List<Integer> genome_ , AbstractWorldMap map_){
         birthDate = birthDate_;
@@ -29,10 +30,25 @@ public class Animal {
         genomeIndex = ThreadLocalRandom.current().nextInt(0, genome.size() + 1);
     }
 
+    public void addChild(){
+        childCount += 1;
+    }
+
+    public int getChildCount(){
+        return childCount;
+    }
+
+    public int getGenomeAt(int i){
+        return genome.get(i);
+    }
+
     public int getCurrHealth() {
         return currHealth;
     }
 
+    public int getBirthDate(){
+        return birthDate;
+    }
     // returns position
     public Vector2d getPosition() {
         return position;
