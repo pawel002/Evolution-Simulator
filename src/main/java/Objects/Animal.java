@@ -10,6 +10,7 @@ import static java.lang.Math.min;
 
 public class Animal {
     private final int birthDate;
+    private int deathDate = -1;
     private int currHealth;
     private final int maxHealth;
     private Vector2d position;
@@ -75,8 +76,15 @@ public class Animal {
         currHealth = min(currHealth + change, maxHealth);
     }
 
+    public void setDeathDate(int deathDate_) {
+        deathDate = deathDate_;
+    }
+
     public int getAge(int currDay) {
-        return currDay - birthDate;
+        if (deathDate == -1)
+            return currDay - birthDate;
+        else
+            return deathDate - birthDate;
     }
 
     // moves the animal
