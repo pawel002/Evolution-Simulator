@@ -360,11 +360,11 @@ public class Panel extends JPanel implements ActionListener {
                 getMutationType(mutationType.getText())
         );
 
-        MapSimulation simulation = new MapSimulation(
-                map, Integer.parseInt(delay.getText()),
-                Integer.parseInt(numOfSpawnedAnimals.getText()),
-                Integer.parseInt(grassSpawnedInEachDay.getText()));
-        simulation.startSimulation();
+//        MapSimulation simulation = new MapSimulation(
+//                map, Integer.parseInt(delay.getText()),
+//                Integer.parseInt(numOfSpawnedAnimals.getText()),
+//                Integer.parseInt(grassSpawnedInEachDay.getText()));
+//        simulation.startSimulation();
 
     }
 }
