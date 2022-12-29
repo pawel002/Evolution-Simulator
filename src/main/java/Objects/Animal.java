@@ -1,15 +1,12 @@
-package objects;
+package Objects;
 
-import maps.AbstractWorldMap;
-import maps.Settings;
+import World.WorldHandler;
+import World.Settings;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.min;
-import static java.lang.System.out;
 
 public class Animal {
     private final int birthDate;
@@ -18,10 +15,10 @@ public class Animal {
     private Vector2d position;
     private final List<Integer> genome;
     private int genomeIndex;
-    private final AbstractWorldMap map;
+    private final WorldHandler map;
     private int childCount = 0;
 
-    public Animal(Vector2d pos_, int maxHealth_, int currHealth_, int birthDate_, List<Integer> genome_, AbstractWorldMap map_) {
+    public Animal(Vector2d pos_, int maxHealth_, int currHealth_, int birthDate_, List<Integer> genome_, WorldHandler map_) {
         birthDate = birthDate_;
         currHealth = currHealth_;
         maxHealth = maxHealth_;

@@ -1,4 +1,4 @@
-package maps;
+package World;
 
 public class Settings {
 

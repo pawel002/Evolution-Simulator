@@ -1,15 +1,4 @@
-import maps.AbstractWorldMap;
-import maps.AnimalCompare;
-import maps.Settings;
-import objects.Animal;
-import objects.Grass;
-import objects.Vector2d;
-
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static java.lang.System.out;
-import static java.lang.System.setOut;
+import Menu.Menu;
 
 // DONE
 // - inicjalizacja mapy - zwierzeta i trawa na siebie nie nachodzą
@@ -29,17 +18,19 @@ import static java.lang.System.setOut;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        AbstractWorldMap map = new AbstractWorldMap(10, 10, Settings.WorldType.EARTH,
-                10, 5, 50, Settings.GrassType.EQUATOR,
-                100, 10, 50, 70, 20, 5, Settings.AnimalType.PREDESTINATION,
-                10, 1, Settings.MutationType.CORRECTION);
-
-        out.println(map);
-        for(int i=0; i<10; i++){
-            map.moveAnimals();
-            map.removeDead();
-            map.eatGrass();
-            out.println(map);
-        }
+//        AbstractWorldMap map = new AbstractWorldMap(10, 10, Settings.WorldType.EARTH,
+//                10, 5, 50, Settings.GrassType.EQUATOR,
+//                100, 10, 50, 70, 20, 5, Settings.AnimalType.PREDESTINATION,
+//                10, 1, Settings.MutationType.CORRECTION);
+//
+//        out.println(map);
+//        for(int i=0; i<10; i++){
+//            map.moveAnimals();
+//            map.removeDead();
+//            map.eatGrass();
+//            out.println(map);
+//        }
+        Menu menu = new Menu();
+        menu.startSimulation(null);
     }
 }

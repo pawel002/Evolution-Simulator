@@ -1,8 +1,8 @@
-package maps;
+package World;
 
-import objects.Animal;
-import objects.Grass;
-import objects.Vector2d;
+import Objects.Animal;
+import Objects.Grass;
+import Objects.Vector2d;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.System.out;
 
-public class AbstractWorldMap {
+public class WorldHandler {
     protected Map<Vector2d, List<Animal>> hashedAnimals = new HashMap<>();
     protected List<Animal> animalsList = new ArrayList<>();
     protected List<Animal> deadAnimalsList = new ArrayList<>();
@@ -54,10 +54,10 @@ public class AbstractWorldMap {
     protected final Settings.MutationType mutationType;
 
 
-    public AbstractWorldMap(int width_, int height_, Settings.WorldType worldType_,
-                            int startGrassCount_, int growingGrassCount_, int grassEnergy_, Settings.GrassType grassType_,
-                            int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_, int dailyConsumption_, Settings.AnimalType animalType_,
-                            int genomeSize_, int mutationCoefficient_, Settings.MutationType mutationType_) {
+    public WorldHandler(int width_, int height_, Settings.WorldType worldType_,
+                        int startGrassCount_, int growingGrassCount_, int grassEnergy_, Settings.GrassType grassType_,
+                        int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_, int dailyConsumption_, Settings.AnimalType animalType_,
+                        int genomeSize_, int mutationCoefficient_, Settings.MutationType mutationType_) {
 
         width = width_;
         height = height_;
@@ -74,9 +74,9 @@ public class AbstractWorldMap {
         startAnimalEnergy = startAnimalEnergy_;
         birthEnergyLoss = birthEnergyLoss_;
         animalReadyEnergy = animalReadyEnergy_;
+        animalType = animalType_;
 
         genomeSize = genomeSize_;
-        animalType = animalType_;
         mutationCoefficient = mutationCoefficient_;
         mutationType = mutationType_;
 

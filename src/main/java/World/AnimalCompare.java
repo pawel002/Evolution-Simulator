@@ -1,8 +1,6 @@
-package maps;
+package World;
 
-import objects.Animal;
-
-import java.util.Comparator;
+import Objects.Animal;
 
 public class AnimalCompare{
     public static int compare(Object a, Object b) {
