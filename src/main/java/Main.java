@@ -1,5 +1,6 @@
 import maps.AbstractWorldMap;
 import maps.AnimalCompare;
+import maps.Settings;
 import objects.Animal;
 import objects.Grass;
 import objects.Vector2d;
@@ -28,17 +29,16 @@ import static java.lang.System.setOut;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        AbstractWorldMap map = new AbstractWorldMap(100, 100, 0,
-                25, 5, 50, 0,
-                100, 20, 50, 70, 20, 5, 0,
-                10, 1, 1);
+        AbstractWorldMap map = new AbstractWorldMap(10, 10, Settings.WorldType.EARTH,
+                10, 5, 50, Settings.GrassType.EQUATOR,
+                100, 10, 50, 70, 20, 5, Settings.AnimalType.PREDESTINATION,
+                10, 1, Settings.MutationType.CORRECTION);
 
         out.println(map);
-        for(int i=0; i<100; i++){
+        for(int i=0; i<10; i++){
             map.moveAnimals();
             map.removeDead();
             map.eatGrass();
-            map.growGrass();
             out.println(map);
         }
     }

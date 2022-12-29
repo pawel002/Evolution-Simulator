@@ -13,23 +13,26 @@ import static java.lang.System.out;
 
 public class AbstractWorldMap {
     protected Map<Vector2d, List<Animal>> hashedAnimals = new HashMap<>();
-    protected Map<Vector2d, Grass> hashedGrass = new HashMap<>();
     protected List<Animal> animalsList = new ArrayList<>();
     protected List<Animal> deadAnimalsList = new ArrayList<>();
-    protected List<Grass> grassList = new ArrayList<>();
+
+    protected Map<Vector2d, Grass> hashedGrass = new HashMap<>();
+    protected Set<Vector2d> hashedJungle = new HashSet<Vector2d>();
+    protected List<Vector2d> freeJungle = new ArrayList<>();
+    protected List<Vector2d> freeDune = new ArrayList<>();
 
     // world properties
     protected final int width;
     protected final int height;
     // 0 - earth, 1 - portal
-    protected final int worldType;
+    protected final Settings.WorldType worldType;
 
     // grass
     protected int startGrassCount;
     protected final int growingGrassCount;
     protected final int grassEnergy;
     // 0 - equator, 1 - toxic
-    protected final int grassType;
+    protected final Settings.GrassType grassType;
 
     // dynamic grass count
     int eatenGrass;
@@ -42,19 +45,19 @@ public class AbstractWorldMap {
     protected final int animalReadyEnergy;
     protected final int birthEnergyLoss;
     // 0 - predestination, 1 - random moves
-    protected final int animalType;
+    protected final Settings.AnimalType animalType;
 
     // mutation
     protected final int genomeSize;
     protected final int mutationCoefficient;
     // 0 - random, 1 - slight correction
-    protected final int mutationType;
+    protected final Settings.MutationType mutationType;
 
 
-    public AbstractWorldMap(int width_, int height_, int worldType_,
-                            int startGrassCount_, int growingGrassCount_, int grassEnergy_, int grassType_,
-                            int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_, int dailyConsumption_, int animalType_,
-                            int genomeSize_, int mutationCoefficient_, int mutationType_) {
+    public AbstractWorldMap(int width_, int height_, Settings.WorldType worldType_,
+                            int startGrassCount_, int growingGrassCount_, int grassEnergy_, Settings.GrassType grassType_,
+                            int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_, int dailyConsumption_, Settings.AnimalType animalType_,
+                            int genomeSize_, int mutationCoefficient_, Settings.MutationType mutationType_) {
 
         width = width_;
         height = height_;
@@ -100,39 +103,64 @@ public class AbstractWorldMap {
         startGrassCount = min(startGrassCount, width * height - startAnimalCount);
 
         // 0 when equator
-        if (grassType == 0) {
-            while (grassList.size() < startGrassCount) {
-                int number = ThreadLocalRandom.current().nextInt(0, 5);
-                // if we roll 0 -> the grass grows in less preferable spot
-                int x, y;
-                x = ThreadLocalRandom.current().nextInt(0, width);
-                if (number == 0) {
-                    int side = ThreadLocalRandom.current().nextInt(0, 2);
-                    if (side == 0) {
-                        y = ThreadLocalRandom.current().nextInt(0, height / 3 + 1);
+        if (grassType == Settings.GrassType.EQUATOR) {
+            // define jungle spots 2/5 -> 3/5
+            for(int i = 0; i<height; i++){
+                for(int j=0 ; j<width; j++){
+                    Vector2d v = new Vector2d(j, i);
+                    if((height * 2) / 5 <= i && i < (height * 3) / 5){
+                        hashedJungle.add(v);
+                        freeJungle.add(v);
                     } else {
-                        y = ThreadLocalRandom.current().nextInt(2 * height / 3, height);
+                        freeDune.add(v);
                     }
-                } else {
-                    y = ThreadLocalRandom.current().nextInt(height / 3, 2 * height / 3 + 1);
                 }
-                Vector2d pos = new Vector2d(x, y);
-                if (!isOccupied(pos)) {
-                    Grass grass = new Grass(pos);
-                    grassList.add(grass);
-                    hashedGrass.put(pos, grass);
-                }
+            }
+
+            // fill the world with grass
+            for(int i=0; i< startGrassCount; i++){
+                this.addGrass();
             }
         } else {
-            // no animals died -> we can place grass at random
-            while (grassList.size() < startGrassCount) {
-                int x = ThreadLocalRandom.current().nextInt(0, width);
-                int y = ThreadLocalRandom.current().nextInt(0, height);
-                Vector2d pos = new Vector2d(x, y);
-                Grass grass = new Grass(pos);
-                grassList.add(grass);
-                hashedGrass.put(pos, grass);
-            }
+            // toxic squares
+        }
+
+    }
+
+    // adds single grass
+    public boolean addGrass(){
+        // if x == 0 then we take less preferable spot
+        int x = ThreadLocalRandom.current().nextInt(0, 5);
+        if((x == 0 || freeJungle.isEmpty()) && !freeDune.isEmpty() ){
+            int index = ThreadLocalRandom.current().nextInt(0, freeDune.size());
+            Vector2d v = freeDune.get(index);
+            freeDune.remove(index);
+
+            Grass grass = new Grass(v);
+            hashedGrass.put(v, grass);
+            return true;
+        } else if (!freeJungle.isEmpty()){
+            // preferable spot
+            int index = ThreadLocalRandom.current().nextInt(0, freeJungle.size());
+            Vector2d v = freeJungle.get(index);
+            freeJungle.remove(index);
+
+            Grass grass = new Grass(v);
+            hashedGrass.put(v, grass);
+            return true;
+        }
+        return false;
+    }
+
+    public void removeGrass(Vector2d pos){
+        if(!hashedGrass.containsKey(pos)){
+            return;
+        }
+        hashedGrass.remove(pos);
+        if(hashedJungle.contains(pos)){
+            freeJungle.add(pos);
+        } else {
+            freeDune.add(pos);
         }
     }
 
@@ -178,10 +206,10 @@ public class AbstractWorldMap {
                         animal = currAnimalList.get(i);
                     }
                 }
+
                 Grass grass = hashedGrass.get(animal.getPosition());
                 animal.increaseHealth(grassEnergy);
-                hashedGrass.remove(animal.getPosition());
-                grassList.remove(grass);
+                removeGrass(animal.getPosition());
                 eatenGrassCount += 1;
             }
         }
@@ -232,30 +260,10 @@ public class AbstractWorldMap {
     }
 
     public void growGrass() {
-        if(grassType == 0){
+        if(grassType == Settings.GrassType.EQUATOR){
             int grassAddedCount = 0;
-            while (grassAddedCount < growingGrassCount) {
-                int number = ThreadLocalRandom.current().nextInt(0, 5);
-                // if we roll 0 -> the grass grows in less preferable spot
-                int x, y;
-                x = ThreadLocalRandom.current().nextInt(0, width);
-                if (number == 0) {
-                    int side = ThreadLocalRandom.current().nextInt(0, 2);
-                    if (side == 0) {
-                        y = ThreadLocalRandom.current().nextInt(0, height / 3 + 1);
-                    } else {
-                        y = ThreadLocalRandom.current().nextInt(2 * height / 3, height);
-                    }
-                } else {
-                    y = ThreadLocalRandom.current().nextInt(height / 3, 2 * height / 3 + 1);
-                }
-                Vector2d pos = new Vector2d(x, y);
-                if (!hashedGrass.containsKey(pos)) {
-                    Grass grass = new Grass(pos);
-                    grassList.add(grass);
-                    hashedGrass.put(pos, grass);
-                    grassAddedCount ++;
-                }
+            while (grassAddedCount < growingGrassCount && addGrass()) {
+                grassAddedCount ++;
             }
         } else {
             // toxic spots
@@ -285,7 +293,7 @@ public class AbstractWorldMap {
 
         ArrayList<Integer> list = new ArrayList<Integer>(genomeSize);
         // mutation - random
-        if (mutationType == 0) {
+        if (mutationType == Settings.MutationType.RANDOM) {
             for (int i = 0; i < genomeSize; i++) {
                 list.add(i);
             }
@@ -328,19 +336,14 @@ public class AbstractWorldMap {
         return height;
     }
 
-    public int getWorldType() {
+    public Settings.WorldType getWorldType() {
         return worldType;
     }
 
-    public int getAnimalType() {
+    public Settings.AnimalType getAnimalType() {
         return animalType;
     }
 
-    // debug methods
-    public void addGrass(Grass grass) {
-        hashedGrass.put(grass.getPosition(), grass);
-        grassList.add(grass);
-    }
 
     public void removeHashedAnimal(Animal animal) {
         if (hashedAnimals.containsKey(animal.getPosition())) {
@@ -365,7 +368,7 @@ public class AbstractWorldMap {
 
         out.println(String.join(" ", "GRASS STARTING:", Integer.toString(startGrassCount)));
         out.println(String.join(" ", "GRASS EATEN:", Integer.toString(eatenGrass)));
-        out.println(String.join(" ", "GRASS LEFT:", Integer.toString(grassList.size())));
+        out.println(String.join(" ", "GRASS LEFT:", Integer.toString(hashedGrass.size())));
 
         for (Animal a : animalsList) {
             String res = String.join("  ", a.getPosition().toString(), "->", Integer.toString(a.getCurrHealth()));

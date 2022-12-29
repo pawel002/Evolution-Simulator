@@ -1,6 +1,7 @@
 package objects;
 
 import maps.AbstractWorldMap;
+import maps.Settings;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -56,11 +57,11 @@ public class Animal {
         return birthDate;
     }
 
-    public int getGenomeIndex(){
+    public int getGenomeIndex() {
         return genomeIndex;
     }
 
-    public int getGenomeSize(){
+    public int getGenomeSize() {
         return genome.size();
     }
 
@@ -85,7 +86,7 @@ public class Animal {
     public void move() {
         Integer movement = genome.get(genomeIndex);
         // normal movements
-        if (map.getAnimalType() == 0) {
+        if (map.getAnimalType() == Settings.AnimalType.PREDESTINATION) {
             genomeIndex = (genomeIndex + 1) % genome.size();
         } else {
             // 20% chance to go to random genome
@@ -96,7 +97,7 @@ public class Animal {
         }
         Vector2d newPos = newPos(movement);
         // earth
-        if (map.getWorldType() == 0) {
+        if (map.getWorldType() == Settings.WorldType.EARTH) {
             position = new Vector2d((newPos.x + map.getWidth()) % map.getWidth(), (newPos.y + map.getHeight()) % map.getHeight());
         } else {
             // portal
