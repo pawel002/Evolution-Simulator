@@ -19,31 +19,27 @@ import static java.lang.System.setOut;
 // - eat grass - do sprawdzenia
 // - rozmnazanie - do sprawdzenia
 // - przemieszanie kolejnosci wykonywania genow
+// - wyrastanie trawy - bardziej efektywnie + fix inifite loop przy pełnej mapie
 
 
 // TODO
-// - wyrastanie trawy
 // - sortowanie po smiertelosci pól
 
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        AbstractWorldMap map = new AbstractWorldMap(20, 10, 0,
-                25, 2, 50, 0,
-                100, 2, 50, 70, 20, 20, 0,
+        AbstractWorldMap map = new AbstractWorldMap(100, 100, 0,
+                25, 5, 50, 0,
+                100, 20, 50, 70, 20, 5, 0,
                 10, 1, 1);
 
-        List<Integer> genome1 = new ArrayList<>();
-        List<Integer> genome2 = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            int number1 = 7;
-            genome1.add(number1);
-            int number2 = ThreadLocalRandom.current().nextInt(0, 8);
-            genome2.add(number2);
+        out.println(map);
+        for(int i=0; i<100; i++){
+            map.moveAnimals();
+            map.removeDead();
+            map.eatGrass();
+            map.growGrass();
+            out.println(map);
         }
-
-        Animal animal1 = new Animal(new Vector2d(1, 1), 200, 150, 0, genome1, map);
-        Animal animal2 = new Animal(new Vector2d(1, 1), 200, 150, 0, genome2, map);
-        out.println(AnimalCompare.compare(animal1, animal2));
     }
 }

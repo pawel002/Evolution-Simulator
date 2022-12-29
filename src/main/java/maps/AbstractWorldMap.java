@@ -232,7 +232,34 @@ public class AbstractWorldMap {
     }
 
     public void growGrass() {
-
+        if(grassType == 0){
+            int grassAddedCount = 0;
+            while (grassAddedCount < growingGrassCount) {
+                int number = ThreadLocalRandom.current().nextInt(0, 5);
+                // if we roll 0 -> the grass grows in less preferable spot
+                int x, y;
+                x = ThreadLocalRandom.current().nextInt(0, width);
+                if (number == 0) {
+                    int side = ThreadLocalRandom.current().nextInt(0, 2);
+                    if (side == 0) {
+                        y = ThreadLocalRandom.current().nextInt(0, height / 3 + 1);
+                    } else {
+                        y = ThreadLocalRandom.current().nextInt(2 * height / 3, height);
+                    }
+                } else {
+                    y = ThreadLocalRandom.current().nextInt(height / 3, 2 * height / 3 + 1);
+                }
+                Vector2d pos = new Vector2d(x, y);
+                if (!hashedGrass.containsKey(pos)) {
+                    Grass grass = new Grass(pos);
+                    grassList.add(grass);
+                    hashedGrass.put(pos, grass);
+                    grassAddedCount ++;
+                }
+            }
+        } else {
+            // toxic spots
+        }
     }
 
     public List<Integer> childGenome(Animal animal1, Animal animal2) {
@@ -336,6 +363,9 @@ public class AbstractWorldMap {
     @Override
     public String toString() {
 
+        out.println(String.join(" ", "GRASS STARTING:", Integer.toString(startGrassCount)));
+        out.println(String.join(" ", "GRASS EATEN:", Integer.toString(eatenGrass)));
+        out.println(String.join(" ", "GRASS LEFT:", Integer.toString(grassList.size())));
 
         for (Animal a : animalsList) {
             String res = String.join("  ", a.getPosition().toString(), "->", Integer.toString(a.getCurrHealth()));

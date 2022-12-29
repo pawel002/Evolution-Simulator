@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.min;
+import static java.lang.System.out;
 
 public class Animal {
     private final int birthDate;
@@ -27,12 +28,12 @@ public class Animal {
         genome = genome_;
         map = map_;
 
-        genomeIndex = ThreadLocalRandom.current().nextInt(0, genome.size() + 1);
+        genomeIndex = ThreadLocalRandom.current().nextInt(0, genome.size());
     }
 
     @Override
     public String toString() {
-        return "A";
+        return String.join(" ", position.toString());
     }
 
     public void addChild() {
@@ -53,6 +54,14 @@ public class Animal {
 
     public int getBirthDate() {
         return birthDate;
+    }
+
+    public int getGenomeIndex(){
+        return genomeIndex;
+    }
+
+    public int getGenomeSize(){
+        return genome.size();
     }
 
     // returns position
@@ -76,19 +85,19 @@ public class Animal {
     public void move() {
         Integer movement = genome.get(genomeIndex);
         // normal movements
-        if(map.getAnimalType() == 0){
+        if (map.getAnimalType() == 0) {
             genomeIndex = (genomeIndex + 1) % genome.size();
         } else {
             // 20% chance to go to random genome
             int number = ThreadLocalRandom.current().nextInt(0, 5);
-            if (number == 0){
+            if (number == 0) {
                 genomeIndex = ThreadLocalRandom.current().nextInt(0, genome.size());
             }
         }
         Vector2d newPos = newPos(movement);
         // earth
         if (map.getWorldType() == 0) {
-            position = new Vector2d(newPos.x % map.getWidth(), newPos.y % map.getHeight());
+            position = new Vector2d((newPos.x + map.getWidth()) % map.getWidth(), (newPos.y + map.getHeight()) % map.getHeight());
         } else {
             // portal
             if (newPos.x < 0 || newPos.x >= map.getWidth() || newPos.y < 0 || newPos.y >= map.getHeight()) {
