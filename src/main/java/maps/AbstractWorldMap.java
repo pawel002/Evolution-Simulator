@@ -4,10 +4,7 @@ import objects.Animal;
 import objects.Grass;
 import objects.Vector2d;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.abs;
@@ -24,6 +21,7 @@ public class AbstractWorldMap {
     // world properties
     protected final int width;
     protected final int height;
+    // 0 - earth, 1 - portal
     protected final int worldType;
 
     // grass
@@ -38,24 +36,25 @@ public class AbstractWorldMap {
 
     // animals
     protected final int animalMaxEnergy;
+    protected final int dailyConsumption;
     protected final int startAnimalCount;
     protected final int startAnimalEnergy;
     protected final int animalReadyEnergy;
     protected final int birthEnergyLoss;
-    protected final int genomeSize;
     // 0 - predestination, 1 - random moves
     protected final int animalType;
 
     // mutation
-    protected final int mutationCoeff;
+    protected final int genomeSize;
+    protected final int mutationCoefficient;
     // 0 - random, 1 - slight correction
     protected final int mutationType;
 
 
     public AbstractWorldMap(int width_, int height_, int worldType_,
                             int startGrassCount_, int growingGrassCount_, int grassEnergy_, int grassType_,
-                            int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_,
-                            int genomeSize_, int animalType_, int mutationCoeff_, int mutationType_) {
+                            int animalMaxEnergy_, int startAnimalCount_, int startAnimalEnergy_, int animalReadyEnergy_, int birthEnergyLoss_, int dailyConsumption_, int animalType_,
+                            int genomeSize_, int mutationCoefficient_, int mutationType_) {
 
         width = width_;
         height = height_;
@@ -67,6 +66,7 @@ public class AbstractWorldMap {
         grassType = grassType_;
 
         animalMaxEnergy = animalMaxEnergy_;
+        dailyConsumption = dailyConsumption_;
         startAnimalCount = startAnimalCount_;
         startAnimalEnergy = startAnimalEnergy_;
         birthEnergyLoss = birthEnergyLoss_;
@@ -74,7 +74,7 @@ public class AbstractWorldMap {
 
         genomeSize = genomeSize_;
         animalType = animalType_;
-        mutationCoeff = mutationCoeff_;
+        mutationCoefficient = mutationCoefficient_;
         mutationType = mutationType_;
 
         // placing animals
@@ -90,13 +90,8 @@ public class AbstractWorldMap {
                     genome.add(number);
                 }
                 Animal animal = new Animal(pos, animalMaxEnergy, startAnimalEnergy, 0, genome, this);
+                this.addHashedAnimal(animal);
                 animalsList.add(animal);
-                if(hashedAnimals.containsKey(animal.getPosition())){
-                    hashedAnimals.get(animal.getPosition()).add(animal);
-                } else {
-                    hashedAnimals.put(animal.getPosition(), new ArrayList<Animal>());
-                    hashedAnimals.get(animal.getPosition()).add(animal);
-                }
             }
         }
 
@@ -142,32 +137,44 @@ public class AbstractWorldMap {
     }
 
     public void removeDead() {
+        if (animalsList.isEmpty()) {
+            return;
+        }
+
+        List<Animal> tempList = new ArrayList<>();
+
         for (Animal animal : animalsList) {
             if (animal.getCurrHealth() <= 0) {
-                animalsList.remove(animal);
-                deadAnimalsList.add(animal);
-                hashedAnimals.get(animal.getPosition()).remove(animal);
-                if (hashedAnimals.get(animal.getPosition()).size() == 0) {
-                    hashedAnimals.remove(animal.getPosition());
-                }
+                tempList.add(animal);
             }
+        }
+
+        for (Animal animal : tempList) {
+            animalsList.remove(animal);
+            deadAnimalsList.add(animal);
+            removeHashedAnimal(animal);
         }
     }
 
     public void moveAnimals() {
         for (Animal animal : animalsList) {
+            this.removeHashedAnimal(animal);
+
             animal.move();
+            animal.decreaseHealth(dailyConsumption);
+
+            this.addHashedAnimal(animal);
         }
     }
 
     public void eatGrass() {
         int eatenGrassCount = 0;
-        for (Vector2d pos : hashedAnimals.keySet()){
-            if (hashedGrass.containsKey(pos)){
+        for (Vector2d pos : hashedAnimals.keySet()) {
+            if (hashedGrass.containsKey(pos)) {
                 List<Animal> currAnimalList = hashedAnimals.get(pos);
                 Animal animal = currAnimalList.get(0);
-                for(int i=1; i<currAnimalList.size(); i++){
-                    if(AnimalCompare.compare(animal, currAnimalList.get(i)) == 1){
+                for (int i = 1; i < currAnimalList.size(); i++) {
+                    if (AnimalCompare.compare(currAnimalList.get(i), animal) == 1) {
                         animal = currAnimalList.get(i);
                     }
                 }
@@ -230,22 +237,49 @@ public class AbstractWorldMap {
 
     public List<Integer> childGenome(Animal animal1, Animal animal2) {
         int sumEnergy = animal1.getCurrHealth() + animal2.getCurrHealth();
-        int index = (int) ((double) animal1.getCurrHealth() / (double) sumEnergy);
+        int index = (int) ((double) animal1.getCurrHealth() * genomeSize / (double) sumEnergy);
         int random = ThreadLocalRandom.current().nextInt(0, 2);
         List<Integer> childGenome = new ArrayList<>();
         if (random == 0) {
             for (int i = 0; i < genomeSize; i++) {
-                if (i <= index)
+                if (i < index)
                     childGenome.add(animal1.getGenomeAt(i));
                 else
                     childGenome.add(animal2.getGenomeAt(i));
             }
         } else {
             for (int i = 0; i < genomeSize; i++) {
-                if (i <= genomeSize - index)
+                if (i < genomeSize - index)
                     childGenome.add(animal2.getGenomeAt(i));
                 else
                     childGenome.add(animal1.getGenomeAt(i));
+            }
+        }
+
+        ArrayList<Integer> list = new ArrayList<Integer>(genomeSize);
+        // mutation - random
+        if (mutationType == 0) {
+            for (int i = 0; i < genomeSize; i++) {
+                list.add(i);
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < mutationCoefficient; i++) {
+                int idx = rand.nextInt(list.size());
+                childGenome.set(list.remove(idx), ThreadLocalRandom.current().nextInt(0, 8));
+            }
+        } else {
+            // slight correction
+            for (int i = 0; i < genomeSize; i++) {
+                list.add(i);
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < mutationCoefficient; i++) {
+                int idx = rand.nextInt(list.size());
+                int arrIdx = list.remove(idx);
+                int newVal = (childGenome.get(arrIdx) + ThreadLocalRandom.current().nextInt(0, 2) * 2 - 1) % 8;
+                childGenome.set(arrIdx, newVal);
             }
         }
         return childGenome;
@@ -271,36 +305,52 @@ public class AbstractWorldMap {
         return worldType;
     }
 
+    public int getAnimalType() {
+        return animalType;
+    }
+
     // debug methods
-    public void addGrass(Grass grass){
+    public void addGrass(Grass grass) {
         hashedGrass.put(grass.getPosition(), grass);
         grassList.add(grass);
     }
 
-    public void addAnimal(Animal animal){
-        if(hashedAnimals.containsKey(animal.getPosition())){
+    public void removeHashedAnimal(Animal animal) {
+        if (hashedAnimals.containsKey(animal.getPosition())) {
+            hashedAnimals.get(animal.getPosition()).remove(animal);
+        }
+        if (hashedAnimals.get(animal.getPosition()).isEmpty()) {
+            hashedAnimals.remove(animal.getPosition());
+        }
+    }
+
+    public void addHashedAnimal(Animal animal) {
+        if (hashedAnimals.containsKey(animal.getPosition())) {
             hashedAnimals.get(animal.getPosition()).add(animal);
         } else {
             hashedAnimals.put(animal.getPosition(), new ArrayList<Animal>());
             hashedAnimals.get(animal.getPosition()).add(animal);
         }
-        animalsList.add(animal);
     }
 
     @Override
     public String toString() {
-//        for(Vector2d v : hashedGrass.keySet()){
-//            out.println(v);
-//        }
+
+
+        for (Animal a : animalsList) {
+            String res = String.join("  ", a.getPosition().toString(), "->", Integer.toString(a.getCurrHealth()));
+            out.println(res);
+        }
+
         StringBuilder ans = new StringBuilder();
-        for(int i=height-1; i>=0; i--){
+        for (int i = height - 1; i >= 0; i--) {
 
             ans.append(Integer.toString(i));
             ans.append("|");
 
-            for(int j=0; j<width; j++){
+            for (int j = 0; j < width; j++) {
                 int flag = 1;
-                if(hashedAnimals.containsKey(new Vector2d(j, i))){
+                if (hashedAnimals.containsKey(new Vector2d(j, i))) {
                     ans.append("A");
                     flag = 0;
                 }
@@ -311,10 +361,10 @@ public class AbstractWorldMap {
                         flag = 0;
                     }
 
-                if(flag == 1){
+                if (flag == 1) {
                     ans.append(" ");
                 }
-                if(j >= 10){
+                if (j >= 10) {
                     ans.append(" ");
                 }
                 ans.append("|");
@@ -323,7 +373,7 @@ public class AbstractWorldMap {
         }
         ans.append(" ");
         ans.append("|");
-        for(int i=0; i<width; i++){
+        for (int i = 0; i < width; i++) {
             ans.append(Integer.toString(i));
             ans.append(" ");
         }

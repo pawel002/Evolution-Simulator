@@ -75,7 +75,16 @@ public class Animal {
     // moves the animal
     public void move() {
         Integer movement = genome.get(genomeIndex);
-        genomeIndex = (genomeIndex + 1) % genome.size();
+        // normal movements
+        if(map.getAnimalType() == 0){
+            genomeIndex = (genomeIndex + 1) % genome.size();
+        } else {
+            // 20% chance to go to random genome
+            int number = ThreadLocalRandom.current().nextInt(0, 5);
+            if (number == 0){
+                genomeIndex = ThreadLocalRandom.current().nextInt(0, genome.size());
+            }
+        }
         Vector2d newPos = newPos(movement);
         // earth
         if (map.getWorldType() == 0) {
