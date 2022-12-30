@@ -43,6 +43,14 @@ public class Animal {
         return childCount;
     }
 
+    public String getGenome(){
+        StringBuilder res = new StringBuilder();
+        for(int x : genome){
+            res.append(x);
+        }
+        return res.toString();
+    }
+
     public int getGenomeAt(int i) {
         return genome.get(i);
     }

@@ -8,13 +8,14 @@ public class Menu {
     public Menu() {
 
         settingsFrame = new JFrame("Evolution Simulator (Settings)");
-        settingsFrame.setSize(800, 800);
+        settingsFrame.setSize(1000, 600);
         settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         settingsFrame.setLocationRelativeTo(null);
 
     }
-    public void startSimulation(Integer[] defaultMapProperties){
-        settingsFrame.add(new Panel(defaultMapProperties));
+
+    public void startSimulation(){
+        settingsFrame.add(new Panel());
         settingsFrame.setVisible(true);
     }
 }

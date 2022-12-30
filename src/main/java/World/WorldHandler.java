@@ -36,9 +36,6 @@ public class WorldHandler {
     // 0 - equator, 1 - toxic
     private final Settings.GrassType grassType;
 
-    // dynamic grass count
-    int eatenGrass;
-
     // animals
     private final int animalMaxEnergy;
     private final int dailyConsumption;
@@ -54,6 +51,13 @@ public class WorldHandler {
     private final int mutationCoefficient;
     // 0 - random, 1 - slight correction
     private final Settings.MutationType mutationType;
+
+
+    // dynamic grass count
+    int eatenGrass;
+
+    // world defined kids count
+    int kidsCount=0;
 
 
     public WorldHandler(int width_, int height_, Settings.WorldType worldType_,
@@ -275,6 +279,7 @@ public class WorldHandler {
     public void animalKids(int currDate) {
         for (Vector2d pos : hashedAnimals.keySet()) {
             List<Animal> currAnimalList = hashedAnimals.get(pos);
+
             if (currAnimalList.size() == 2 && currAnimalList.get(0).getCurrHealth() >= animalReadyEnergy && currAnimalList.get(1).getCurrHealth() >= animalReadyEnergy) {
                 Animal child = new Animal(currAnimalList.get(0).getPosition(), animalMaxEnergy, 2 * birthEnergyLoss, currDate,
                         childGenome(currAnimalList.get(0), currAnimalList.get(1)), this);
@@ -282,9 +287,13 @@ public class WorldHandler {
                 currAnimalList.get(1).decreaseHealth(birthEnergyLoss);
                 currAnimalList.get(0).addChild();
                 currAnimalList.get(1).addChild();
+
+                kidsCount ++;
                 animalsList.add(child);
                 currAnimalList.add(child);
+
             } else if (currAnimalList.size() > 2) {
+
                 Animal animal1, animal2;
                 if (AnimalCompare.compare(currAnimalList.get(0), currAnimalList.get(1)) == 1) {
                     animal1 = currAnimalList.get(0);
@@ -302,14 +311,19 @@ public class WorldHandler {
                         animal2 = currAnimalList.get(i);
                     }
                 }
-                Animal child = new Animal(animal1.getPosition(), animalMaxEnergy, 2 * birthEnergyLoss, currDate,
-                        childGenome(animal1, animal2), this);
-                animal1.decreaseHealth(birthEnergyLoss);
-                animal2.decreaseHealth(birthEnergyLoss);
-                animal1.addChild();
-                animal2.addChild();
-                animalsList.add(child);
-                currAnimalList.add(child);
+
+                if(animal1.getCurrHealth() >= animalReadyEnergy && animal2.getCurrHealth() >= animalReadyEnergy){
+                    Animal child = new Animal(animal1.getPosition(), animalMaxEnergy, 2 * birthEnergyLoss, currDate,
+                            childGenome(animal1, animal2), this);
+                    animal1.decreaseHealth(birthEnergyLoss);
+                    animal2.decreaseHealth(birthEnergyLoss);
+                    animal1.addChild();
+                    animal2.addChild();
+
+                    kidsCount ++;
+                    animalsList.add(child);
+                    currAnimalList.add(child);
+                }
             }
         }
     }
@@ -363,7 +377,7 @@ public class WorldHandler {
             for (int i = 0; i < mutationCoefficient; i++) {
                 int idx = rand.nextInt(list.size());
                 int arrIdx = list.remove(idx);
-                int newVal = (childGenome.get(arrIdx) + ThreadLocalRandom.current().nextInt(0, 2) * 2 - 1) % 8;
+                int newVal = ((childGenome.get(arrIdx) + ThreadLocalRandom.current().nextInt(0, 2) * 2 - 1) + 8 ) % 8;
                 childGenome.set(arrIdx, newVal);
             }
         }
@@ -413,15 +427,37 @@ public class WorldHandler {
         }
     }
 
+    // debug add animal to map
+    public void addAnimal(Animal animal){
+        addHashedAnimal(animal);
+        animalsList.add(animal);
+    }
+
+    public void addGrass(Grass grass){
+        hashedGrass.put(grass.getPosition(), grass);
+        if (grassType == Settings.GrassType.EQUATOR){
+            freeJungle.remove(grass.getPosition());
+            freeDune.remove(grass.getPosition());
+        } else {
+            freeJungle.remove(grass.getPosition());
+        }
+
+    }
+
     @Override
     public String toString() {
 
         out.println(String.join(" ", "GRASS STARTING:", Integer.toString(startGrassCount)));
-        out.println(String.join(" ", "GRASS EATEN:", Integer.toString(eatenGrass)));
+        out.println(String.join(" ", "GRASS EATEN THIS ROUND:", Integer.toString(eatenGrass)));
         out.println(String.join(" ", "GRASS LEFT:", Integer.toString(hashedGrass.size())));
 
+        out.println(String.join(" ", "ANIMAL STARTING:", Integer.toString(startAnimalCount)));
+        out.println(String.join(" ", "ANIMAL KIDS:", Integer.toString(kidsCount)));
+        out.println(String.join(" ", "DEAD ANIMALS:", Integer.toString(deadAnimalsList.size())));
+        out.println(String.join(" ", "CURR ANIMALS:", Integer.toString(animalsList.size())));
+
         for (Animal a : animalsList) {
-            String res = String.join("  ", a.getPosition().toString(), "->", Integer.toString(a.getCurrHealth()));
+            String res = String.join("  ", a.getPosition().toString(), "->", Integer.toString(a.getCurrHealth()), "Genome:", a.getGenome());
             out.println(res);
         }
 
@@ -451,7 +487,7 @@ public class WorldHandler {
                     ans.append(" ");
                 }
 
-                // deathcount
+                // death count
                 ans.append(",");
                 ans.append(Integer.toString(hashedDeathCount.get(new Vector2d(j, i))));
 

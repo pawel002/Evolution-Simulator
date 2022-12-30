@@ -1,17 +1,26 @@
 package Menu;
 
+import Save.Loader;
+import Save.Saver;
 import World.Settings;
 import World.WorldHandler;
+import javafx.event.EventHandler;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import static java.lang.System.out;
 
 public class Panel extends JPanel implements ActionListener {
 
     public static final int HEIGHT = 800;
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 1200;
 
 
     // simulation options
@@ -41,6 +50,9 @@ public class Panel extends JPanel implements ActionListener {
     private JTextField genomeSize;
     private JTextField mutationCoefficient;
     private JTextField mutationType;
+
+    private JTextField save;
+    private JTextField load;
 
 
     // simulation options
@@ -72,15 +84,15 @@ public class Panel extends JPanel implements ActionListener {
     private JLabel mutationCoefficientLabel;
     private JLabel mutationTypeLabel;
 
+    private JLabel saveLabel;
+    private JLabel loadLabel;
+
     //button
     private JButton startButton;
 
-    public Panel(Integer[] defaultMapProperties) {
+    public Panel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
-        startButton = new JButton("Start Simulation");
-        startButton.addActionListener(this);
 
         //LABELS
         //sim
@@ -106,83 +118,104 @@ public class Panel extends JPanel implements ActionListener {
         animalReadyEnergyLabel = new JLabel("Energy required to be ready for birth (int):           ");
         animalTypeLabel = new JLabel("'R' - RANDOM, 'P' - PREDESTINATION:           ");
 
+
         // genome
         genomeSizeLabel = new JLabel("Genome size (int):           ");
         mutationCoefficientLabel = new JLabel("Mutation size (int):           ");
         mutationTypeLabel = new JLabel("'R' - RANDOM, 'C' - CORRECTION:           ");
 
+        // SAVING
+        saveLabel = new JLabel("Save (filename - string):           ");
+        loadLabel = new JLabel("Load (filename - string):           ");
+
+        // LOAD DEFAULT !!!
+        Loader defaultLoader = new Loader();
+        try {
+            defaultLoader.read("default");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         int SIZE = 18;
         delay = new JTextField();
         delay.setColumns(SIZE);
-//        delay.setText(defaultMapProperties[0].toString());
+        delay.setText(Integer.toString(defaultLoader.getDelay()));
 
         width = new JTextField();
         width.setColumns(SIZE);
-//        width.setText(defaultMapProperties[1].toString());
+        width.setText(Integer.toString(defaultLoader.getWidth()));
 
         height = new JTextField();
         height.setColumns(SIZE);
-//        height.setText(defaultMapProperties[2].toString());
+        height.setText(Integer.toString(defaultLoader.getHeight()));
 
         worldType = new JTextField();
         worldType.setColumns(SIZE);
-//        worldType.setText(defaultMapProperties[3].toString());
+        worldType.setText(defaultLoader.getWorldType().toString());
 
         startGrassCount = new JTextField();
         startGrassCount.setColumns(SIZE);
-//        startGrassCount.setText(defaultMapProperties[4].toString());
+        startGrassCount.setText(Integer.toString(defaultLoader.getStartGrassCount()));
 
         growingGrassCount = new JTextField();
         growingGrassCount.setColumns(SIZE);
-//        growingGrassCount.setText(defaultMapProperties[5].toString());
+        growingGrassCount.setText(Integer.toString(defaultLoader.getGrowingGrassCount()));
 
         grassEnergy = new JTextField();
         grassEnergy.setColumns(SIZE);
-//        grassEnergy.setText(defaultMapProperties[6].toString());
+        grassEnergy.setText(Integer.toString(defaultLoader.getGrassEnergy()));
 
         grassType = new JTextField();
         grassType.setColumns(SIZE);
-//        grassType.setText(defaultMapProperties[7].toString());
+        grassType.setText(defaultLoader.getGrassType().toString());
 
         animalMaxEnergy = new JTextField();
         animalMaxEnergy.setColumns(SIZE);
-//        animalMaxEnergy.setText(defaultMapProperties[8].toString());
+        animalMaxEnergy.setText(Integer.toString(defaultLoader.getAnimalMaxEnergy()));
 
         dailyConsumption = new JTextField();
         dailyConsumption.setColumns(SIZE);
-//        dailyConsumption.setText(defaultMapProperties[9].toString());
+        dailyConsumption.setText(Integer.toString(defaultLoader.getDailyConsumption()));
 
         startAnimalCount = new JTextField();
         startAnimalCount.setColumns(SIZE);
-//        startAnimalCount.setText(defaultMapProperties[10].toString());
+        startAnimalCount.setText(Integer.toString(defaultLoader.getStartAnimalCount()));
 
         startAnimalEnergy = new JTextField();
         startAnimalEnergy.setColumns(SIZE);
-//        startAnimalEnergy.setText(defaultMapProperties[11].toString());
+        startAnimalEnergy.setText(Integer.toString(defaultLoader.getStartAnimalEnergy()));
 
         birthEnergyLoss = new JTextField();
         birthEnergyLoss.setColumns(SIZE);
-//        birthEnergyLoss.setText(defaultMapProperties[12].toString());
+        birthEnergyLoss.setText(Integer.toString(defaultLoader.getBirthEnergyLoss()));
 
         animalReadyEnergy = new JTextField();
         animalReadyEnergy.setColumns(SIZE);
-//        animalReadyEnergy.setText(defaultMapProperties[13].toString());
+        animalReadyEnergy.setText(Integer.toString(defaultLoader.getAnimalReadyEnergy()));
 
         animalType = new JTextField();
         animalType.setColumns(SIZE);
-//        animalType.setText(defaultMapProperties[14].toString());
+        animalType.setText(defaultLoader.getAnimalType().toString());
 
         genomeSize = new JTextField();
         genomeSize.setColumns(SIZE);
-//        genomeSize.setText(defaultMapProperties[15].toString());
+        genomeSize.setText(Integer.toString(defaultLoader.getGenomeSize()));
 
         mutationCoefficient = new JTextField();
         mutationCoefficient.setColumns(SIZE);
-//        mutationCoefficient.setText(defaultMapProperties[16].toString());
+        mutationCoefficient.setText(Integer.toString(defaultLoader.getMutationCoefficient()));
 
         mutationType = new JTextField();
         mutationType.setColumns(SIZE);
-//        mutationType.setText(defaultMapProperties[17].toString());
+        mutationType.setText(defaultLoader.getMutationType().toString());
+
+        save = new JTextField();
+        save.setColumns(SIZE);
+        save.setText("Enter name to save");
+
+        load = new JTextField();
+        load.setColumns(SIZE);
+        load.setText("Loaded default");
 
         //Labels to text fields
         delayLabel.setLabelFor(delay);
@@ -208,6 +241,34 @@ public class Panel extends JPanel implements ActionListener {
         mutationCoefficientLabel.setLabelFor(mutationCoefficient);
         mutationTypeLabel.setLabelFor(mutationType);
 
+        startButton = new JButton("Start Simulation");
+
+        saveLabel.setLabelFor(save);
+        loadLabel.setLabelFor(load);
+
+        JButton saveButton = new JButton("Save");
+        JButton loadButton = new JButton("Load");
+
+        saveButton.setActionCommand("save");
+        loadButton.setActionCommand("load");
+        startButton.setActionCommand("start");
+
+        saveButton.addActionListener(this);
+        loadButton.addActionListener(this);
+        startButton.addActionListener(this);
+
+        JPanel mainPanel = new JPanel(new GridLayout(1, 2));
+
+        JPanel LeftPanel = new JPanel(new GridLayout(14, 1));
+        LeftPanel.setAlignmentX(CENTER_ALIGNMENT);
+        JPanel RightPanel = new JPanel(new GridLayout(13, 1));
+
+
+        mainPanel.add(LeftPanel);
+        mainPanel.add(RightPanel);
+
+        add(mainPanel);
+
         JPanel l1 = new JPanel();
         JPanel l2 = new JPanel();
         JPanel l3 = new JPanel();
@@ -226,6 +287,8 @@ public class Panel extends JPanel implements ActionListener {
         JPanel l16 = new JPanel();
         JPanel l17 = new JPanel();
         JPanel l18 = new JPanel();
+        JPanel l19 = new JPanel();
+        JPanel l20 = new JPanel();
 
 
         l1.add(delayLabel);
@@ -246,6 +309,8 @@ public class Panel extends JPanel implements ActionListener {
         l16.add(genomeSizeLabel);
         l17.add(mutationCoefficientLabel);
         l18.add(mutationTypeLabel);
+        l19.add(saveLabel);
+        l20.add(loadLabel);
 
         l1.add(delay);
         l2.add(width);
@@ -265,106 +330,166 @@ public class Panel extends JPanel implements ActionListener {
         l16.add(genomeSize);
         l17.add(mutationCoefficient);
         l18.add(mutationType);
+        l19.add(save);
+        l20.add(load);
+
+        l19.add(saveButton);
+        l20.add(loadButton);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(startButton);
 
-        add(new JLabel("Simulation settings"));
-        add(l1);
 
-        add(new JLabel("Map settings"));
-        add(l2);
-        add(l3);
-        add(l4);
+        JPanel simSettings = new JPanel();
+        simSettings.add(new JLabel("Simulation settings"));
+        LeftPanel.add(simSettings);
+        LeftPanel.add(l1);
 
-        add(new JLabel("Grass settings"));
-        add(l5);
-        add(l6);
-        add(l7);
-        add(l8);
+        JPanel mapSettings = new JPanel();
+        mapSettings.add(new JLabel("Map settings"));
+        LeftPanel.add(mapSettings);
+        LeftPanel.add(l2);
+        LeftPanel.add(l3);
+        LeftPanel.add(l4);
 
-        add(new JLabel("Animal settings"));
-        add(l9);
-        add(l10);
-        add(l11);
-        add(l12);
-        add(l13);
-        add(l14);
-        add(l15);
+        JPanel grassSettings = new JPanel();
+        grassSettings.add(new JLabel("Grass settings"));
+        RightPanel.add(grassSettings);
+        RightPanel.add(l5);
+        RightPanel.add(l6);
+        RightPanel.add(l7);
+        RightPanel.add(l8);
 
-        add(new JLabel("Mutation settings"));
-        add(l16);
-        add(l17);
-        add(l18);
+        JPanel animalSettings = new JPanel();
+        animalSettings.add(new JLabel("Animal settings"));
+        LeftPanel.add(animalSettings);
+        LeftPanel.add(l9);
+        LeftPanel.add(l10);
+        LeftPanel.add(l11);
+        LeftPanel.add(l12);
+        LeftPanel.add(l13);
+        LeftPanel.add(l14);
+        LeftPanel.add(l15);
 
-        add(buttonPanel);
+        JPanel mutationSettings = new JPanel();
+        mutationSettings.add(new JLabel("Mutation settings"));
+        RightPanel.add(mutationSettings);
+        RightPanel.add(l16);
+        RightPanel.add(l17);
+        RightPanel.add(l18);
 
-    }
+        JPanel saveSettings = new JPanel();
+        saveSettings.add(new JLabel("SAVE / LOAD"));
+        RightPanel.add(saveSettings);
+        RightPanel.add(l19);
+        RightPanel.add(l20);
 
-    public Settings.WorldType getWorldType(String str){
-        if(str.equals("E"))
-            return  Settings.WorldType.EARTH;
-        else if (str.equals("P"))
-            return  Settings.WorldType.PORTAL;
-        throw new IllegalArgumentException(String.join(" ", "World type wrong argument:", str, ". Can only be E and P."));
-    }
+        RightPanel.add(buttonPanel);
 
-    public Settings.GrassType getGrassType(String str){
-        if(str.equals("E"))
-            return  Settings.GrassType.EQUATOR;
-        else if (str.equals("T"))
-            return  Settings.GrassType.TOXIC;
-        throw new IllegalArgumentException(String.join(" ", "Grass type wrong argument:", str, ". Can only be E and T."));
-    }
-
-    public Settings.AnimalType getAnimalType(String str){
-        if(str.equals("R"))
-            return  Settings.AnimalType.RANDOM;
-        else if (str.equals("P"))
-            return  Settings.AnimalType.PREDESTINATION;
-        throw new IllegalArgumentException(String.join(" ", "Animal type wrong argument:", str, ". Can only be P and R."));
-    }
-
-    public Settings.MutationType getMutationType(String str){
-        if(str.equals("R"))
-            return  Settings.MutationType.RANDOM;
-        else if (str.equals("C"))
-            return  Settings.MutationType.CORRECTION;
-        throw new IllegalArgumentException(String.join(" ", "Mutation type wrong argument:", str, ". Can only be C and R."));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        if(e.getActionCommand().equals("start")){
 
-        WorldHandler map = new WorldHandler(
-                Integer.parseInt(width.getText()),
-                Integer.parseInt(height.getText()),
-                getWorldType(worldType.getText()),
+            WorldHandler map = new WorldHandler(
+                    Integer.parseInt(width.getText()),
+                    Integer.parseInt(height.getText()),
+                    Settings.getWorldType(worldType.getText()),
 
-                Integer.parseInt(startGrassCount.getText()),
-                Integer.parseInt(growingGrassCount.getText()),
-                Integer.parseInt(grassEnergy.getText()),
-                getGrassType(grassType.getText()),
+                    Integer.parseInt(startGrassCount.getText()),
+                    Integer.parseInt(growingGrassCount.getText()),
+                    Integer.parseInt(grassEnergy.getText()),
+                    Settings.getGrassType(grassType.getText()),
 
-                Integer.parseInt(animalMaxEnergy.getText()),
-                Integer.parseInt(startAnimalCount.getText()),
-                Integer.parseInt(startAnimalEnergy.getText()),
-                Integer.parseInt(animalReadyEnergy.getText()),
-                Integer.parseInt(birthEnergyLoss.getText()),
-                Integer.parseInt(dailyConsumption.getText()),
-                getAnimalType(animalType.getText()),
+                    Integer.parseInt(animalMaxEnergy.getText()),
+                    Integer.parseInt(startAnimalCount.getText()),
+                    Integer.parseInt(startAnimalEnergy.getText()),
+                    Integer.parseInt(animalReadyEnergy.getText()),
+                    Integer.parseInt(birthEnergyLoss.getText()),
+                    Integer.parseInt(dailyConsumption.getText()),
+                    Settings.getAnimalType(animalType.getText()),
 
-                Integer.parseInt(genomeSize.getText()),
-                Integer.parseInt(mutationCoefficient.getText()),
-                getMutationType(mutationType.getText())
-        );
+                    Integer.parseInt(genomeSize.getText()),
+                    Integer.parseInt(mutationCoefficient.getText()),
+                    Settings.getMutationType(mutationType.getText())
+            );
 
 //        MapSimulation simulation = new MapSimulation(
 //                map, Integer.parseInt(delay.getText()),
 //                Integer.parseInt(numOfSpawnedAnimals.getText()),
 //                Integer.parseInt(grassSpawnedInEachDay.getText()));
 //        simulation.startSimulation();
+
+        } else if (e.getActionCommand().equals("save")) {
+            String filename = save.getText();
+            if(filename.equals("default")){
+                out.print("Cannot overwrite default");
+                return;
+            }
+            Saver customSaver = new Saver(
+                    Integer.parseInt(delay.getText()),
+                    Integer.parseInt(width.getText()),
+                    Integer.parseInt(height.getText()),
+                    Settings.getWorldType(worldType.getText()),
+
+                    Integer.parseInt(startGrassCount.getText()),
+                    Integer.parseInt(growingGrassCount.getText()),
+                    Integer.parseInt(grassEnergy.getText()),
+                    Settings.getGrassType(grassType.getText()),
+
+                    Integer.parseInt(animalMaxEnergy.getText()),
+                    Integer.parseInt(startAnimalCount.getText()),
+                    Integer.parseInt(startAnimalEnergy.getText()),
+                    Integer.parseInt(animalReadyEnergy.getText()),
+                    Integer.parseInt(birthEnergyLoss.getText()),
+                    Integer.parseInt(dailyConsumption.getText()),
+                    Settings.getAnimalType(animalType.getText()),
+
+                    Integer.parseInt(genomeSize.getText()),
+                    Integer.parseInt(mutationCoefficient.getText()),
+                    Settings.getMutationType(mutationType.getText())
+            );
+
+            try {
+                customSaver.save(filename);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            out.print("Saved Successfully");
+
+        } else {
+            // LOAD
+            String filename = load.getText();
+            Loader customLoader = new Loader();
+            try {
+                customLoader.read(filename);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            delay.setText(Integer.toString(customLoader.getDelay()));
+            width.setText(Integer.toString(customLoader.getWidth()));
+            height.setText(Integer.toString(customLoader.getHeight()));
+            worldType.setText(customLoader.getWorldType().toString());
+            startGrassCount.setText(Integer.toString(customLoader.getStartGrassCount()));
+            growingGrassCount.setText(Integer.toString(customLoader.getGrowingGrassCount()));
+            grassEnergy.setText(Integer.toString(customLoader.getGrassEnergy()));
+            grassType.setText(customLoader.getGrassType().toString());
+            animalMaxEnergy.setText(Integer.toString(customLoader.getAnimalMaxEnergy()));
+            dailyConsumption.setText(Integer.toString(customLoader.getDailyConsumption()));
+            startAnimalCount.setText(Integer.toString(customLoader.getStartAnimalCount()));
+            startAnimalEnergy.setText(Integer.toString(customLoader.getStartAnimalEnergy()));
+            birthEnergyLoss.setText(Integer.toString(customLoader.getBirthEnergyLoss()));
+            animalReadyEnergy.setText(Integer.toString(customLoader.getAnimalReadyEnergy()));
+            animalType.setText(customLoader.getAnimalType().toString());
+            genomeSize.setText(Integer.toString(customLoader.getGenomeSize()));
+            mutationCoefficient.setText(Integer.toString(customLoader.getMutationCoefficient()));
+            mutationType.setText(customLoader.getMutationType().toString());
+
+        }
 
     }
 }
