@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56813896-4263-4435-a6e3-cbef190dffa8" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/configsaves/default" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Save/Loader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Save/Saver.java" afterDir="false" />
+    <list default="true" id="56813896-4263-4435-a6e3-cbef190dffa8" name="Changes" comment="saver / loader">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Simulation/Simulation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
@@ -16,22 +14,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Menu/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Menu/Menu.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Menu/Panel.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Menu/Panel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$AnimalType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$AnimalType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$GrassType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$GrassType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$MutationType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$MutationType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$WorldType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$WorldType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/WorldHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/WorldHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/objects/Animal.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/objects/Animal.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/objects/Vector2d.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/objects/Vector2d.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Menu/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Menu/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Menu/Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Menu/Panel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Objects/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Objects/Animal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/World/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/World/Settings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/World/WorldHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/World/WorldHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -374,7 +362,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672350292482</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="saver / loader">
+      <created>1672362551348</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1672362551348</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -397,6 +392,7 @@
     <MESSAGE value="lab8 test update" />
     <MESSAGE value="init" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="saver / loader" />
+    <option name="LAST_COMMIT_MESSAGE" value="saver / loader" />
   </component>
 </project>

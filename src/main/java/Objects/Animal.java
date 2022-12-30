@@ -89,6 +89,10 @@ public class Animal {
     }
 
     public int getAge(int currDay) {
+        if (currDay == -1){
+            return deathDate - birthDate;
+        }
+
         if (deathDate == -1)
             return currDay - birthDate;
         else

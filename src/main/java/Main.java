@@ -27,17 +27,19 @@ import static java.lang.System.out;
 
 // interface:
 // settings
+// zapisywanie działa
 
 
 // TODO
 // - wizualizacja
+// otwarcie wizulizacji powinno otwierac nowe okno tworzone w Panel -> actionPerformed -> "start"
 
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         WorldHandler map = new WorldHandler(30, 30, Settings.WorldType.EARTH,
                 100, 20, 50, Settings.GrassType.EQUATOR,
-                100, 10, 100, 70, 20, 10, Settings.AnimalType.PREDESTINATION,
+                100, 40, 100, 70, 20, 10, Settings.AnimalType.PREDESTINATION,
                 10, 1, Settings.MutationType.CORRECTION);
 
 
@@ -61,18 +63,19 @@ public class Main {
 //        out.print(L.getAnimalType());
 
 
-//        for(int i=1; i<1000; i++){
-//            map.removeDead(i);
-//            map.moveAnimals();
-//            map.eatGrass();
-//            map.animalKids(i);
-//            map.growGrass();
-//            out.println(map);
-//        }
+        for(int i=1; i<1000; i++){
+            map.removeDead(i);
+            map.moveAnimals();
+            map.eatGrass();
+            map.writeToCSV("save1", i);
+            map.animalKids(i);
+            map.growGrass();
+            out.println(map);
+        }
 
 
-        Menu menu = new Menu();
-        menu.startSimulation();
+//        Menu menu = new Menu();
+//        menu.startSimulation();
 
     }
 }

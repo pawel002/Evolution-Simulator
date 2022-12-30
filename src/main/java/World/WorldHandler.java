@@ -4,6 +4,9 @@ import Objects.Animal;
 import Objects.Grass;
 import Objects.Vector2d;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -444,6 +447,62 @@ public class WorldHandler {
 
     }
 
+    public double getAverageEnergy(){
+        if(animalsList.isEmpty()){
+            return -1;
+        }
+        int sum = 0;
+        for(Animal a : animalsList){
+            sum += a.getCurrHealth();
+        }
+        return (double) sum / (double) animalsList.size();
+    }
+
+    public double getAverageLifespan(){
+        if(deadAnimalsList.isEmpty()){
+            return -1;
+        }
+        int sum = 0;
+        for(Animal a : deadAnimalsList){
+            sum += a.getAge(-1);
+        }
+        return (double) sum / (double) deadAnimalsList.size();
+    }
+
+    public int getFreeSpaces(){
+        int sum = 0;
+        for(int i=0; i<width; i++){
+            for(int j=0; j<height; j++){
+                Vector2d pos = new Vector2d(i, j);
+                if(hashedGrass.containsKey(pos)){
+                    sum ++;
+                    continue;
+                }
+                if(hashedAnimals.containsKey(pos)){
+                    sum ++;
+                    continue;
+                }
+            }
+        }
+        return sum;
+    }
+    public void writeToCSV(String filename, int day) {
+        BufferedWriter myWriter = null;
+        try {
+            myWriter = new BufferedWriter(new FileWriter(String.join("", ".\\reports\\", filename), true));
+            myWriter.write(String.join("",
+                    "Day,", Integer.toString(day),
+                    ",", Integer.toString(animalsList.size()),
+                    ",", Integer.toString(hashedGrass.size()),
+                    ",", Integer.toString(getFreeSpaces()),
+                    ",", Double.toString(getAverageEnergy()),
+                    ",", Double.toString(getAverageLifespan()), "\n"));
+            myWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public String toString() {
 
@@ -506,4 +565,6 @@ public class WorldHandler {
         }
         return ans.toString();
     }
+
+
 }

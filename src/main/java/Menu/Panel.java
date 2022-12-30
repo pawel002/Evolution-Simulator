@@ -2,9 +2,11 @@ package Menu;
 
 import Save.Loader;
 import Save.Saver;
+import Simulation.Simulation;
 import World.Settings;
 import World.WorldHandler;
 import javafx.event.EventHandler;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -21,6 +23,8 @@ public class Panel extends JPanel implements ActionListener {
 
     public static final int HEIGHT = 800;
     public static final int WIDTH = 1200;
+
+    private int simulationCount = 1;
 
 
     // simulation options
@@ -53,7 +57,7 @@ public class Panel extends JPanel implements ActionListener {
 
     private JTextField save;
     private JTextField load;
-
+    private JTextField saveCSV;
 
     // simulation options
     private JLabel delayLabel;
@@ -79,16 +83,21 @@ public class Panel extends JPanel implements ActionListener {
     private JLabel animalReadyEnergyLabel;
     private JLabel animalTypeLabel;
 
-    //
+    // genome
     private JLabel genomeSizeLabel;
     private JLabel mutationCoefficientLabel;
     private JLabel mutationTypeLabel;
 
+    // save
     private JLabel saveLabel;
     private JLabel loadLabel;
+    private JLabel saveCSVLabel;
 
-    //button
+    // button
     private JButton startButton;
+
+    // checkbox
+    JCheckBox saveToCSVButton;
 
     public Panel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -104,16 +113,16 @@ public class Panel extends JPanel implements ActionListener {
         worldTypeLabel = new JLabel("'E' - EARTH, 'P' - PORTAL:           ");
 
         // grass
-        startGrassCountLabel = new JLabel("Staring grass number (int):           ");
+        startGrassCountLabel = new JLabel("Starting grass number (int):           ");
         growingGrassCountLabel = new JLabel("Grass growing every day (int):           ");
-        grassEnergyLabel = new JLabel("Energy of 1 grass (int):           ");
+        grassEnergyLabel = new JLabel("Grass energy (int):           ");
         grassTypeLabel = new JLabel("'E' - EQUATOR, 'T' - TOXIC FIELDS:           ");
 
         // animal
         animalMaxEnergyLabel = new JLabel("Max animal energy (int):           ");
         dailyConsumptionLabel = new JLabel("Daily energy loss (int):           ");
-        startAnimalCountLabel = new JLabel("Staring animals number (int):           ");
-        startAnimalEnergyLabel = new JLabel("Staring animals energy (int):           ");
+        startAnimalCountLabel = new JLabel("Starting animals number (int):           ");
+        startAnimalEnergyLabel = new JLabel("Starting animals energy (int):           ");
         birthEnergyLossLabel = new JLabel("Energy loss when giving birth (int):           ");
         animalReadyEnergyLabel = new JLabel("Energy required to be ready for birth (int):           ");
         animalTypeLabel = new JLabel("'R' - RANDOM, 'P' - PREDESTINATION:           ");
@@ -127,6 +136,7 @@ public class Panel extends JPanel implements ActionListener {
         // SAVING
         saveLabel = new JLabel("Save (filename - string):           ");
         loadLabel = new JLabel("Load (filename - string):           ");
+        saveCSVLabel = new JLabel("Save to CSV:  ");
 
         // LOAD DEFAULT !!!
         Loader defaultLoader = new Loader();
@@ -217,6 +227,10 @@ public class Panel extends JPanel implements ActionListener {
         load.setColumns(SIZE);
         load.setText("Loaded default");
 
+        saveCSV = new JTextField();
+        saveCSV.setColumns(SIZE);
+        saveCSV.setText("N");
+
         //Labels to text fields
         delayLabel.setLabelFor(delay);
 
@@ -245,6 +259,7 @@ public class Panel extends JPanel implements ActionListener {
 
         saveLabel.setLabelFor(save);
         loadLabel.setLabelFor(load);
+        saveCSVLabel.setLabelFor(saveCSV);
 
         JButton saveButton = new JButton("Save");
         JButton loadButton = new JButton("Load");
@@ -261,7 +276,7 @@ public class Panel extends JPanel implements ActionListener {
 
         JPanel LeftPanel = new JPanel(new GridLayout(14, 1));
         LeftPanel.setAlignmentX(CENTER_ALIGNMENT);
-        JPanel RightPanel = new JPanel(new GridLayout(13, 1));
+        JPanel RightPanel = new JPanel(new GridLayout(14, 1));
 
 
         mainPanel.add(LeftPanel);
@@ -289,6 +304,7 @@ public class Panel extends JPanel implements ActionListener {
         JPanel l18 = new JPanel();
         JPanel l19 = new JPanel();
         JPanel l20 = new JPanel();
+        JPanel l21 = new JPanel();
 
 
         l1.add(delayLabel);
@@ -311,6 +327,7 @@ public class Panel extends JPanel implements ActionListener {
         l18.add(mutationTypeLabel);
         l19.add(saveLabel);
         l20.add(loadLabel);
+        l21.add(saveCSVLabel);
 
         l1.add(delay);
         l2.add(width);
@@ -332,6 +349,12 @@ public class Panel extends JPanel implements ActionListener {
         l18.add(mutationType);
         l19.add(save);
         l20.add(load);
+
+        saveToCSVButton = new JCheckBox();
+        saveToCSVButton.setSelected(false);
+
+        l21.add(saveToCSVButton);
+        l21.add(saveCSV);
 
         l19.add(saveButton);
         l20.add(loadButton);
@@ -383,6 +406,7 @@ public class Panel extends JPanel implements ActionListener {
         RightPanel.add(saveSettings);
         RightPanel.add(l19);
         RightPanel.add(l20);
+        RightPanel.add(l21);
 
         RightPanel.add(buttonPanel);
 
@@ -416,11 +440,9 @@ public class Panel extends JPanel implements ActionListener {
                     Settings.getMutationType(mutationType.getText())
             );
 
-//        MapSimulation simulation = new MapSimulation(
-//                map, Integer.parseInt(delay.getText()),
-//                Integer.parseInt(numOfSpawnedAnimals.getText()),
-//                Integer.parseInt(grassSpawnedInEachDay.getText()));
-//        simulation.startSimulation();
+
+        out.println(String.join(" ", "Started Simulation Number", Integer.toString(simulationCount++)));
+        Simulation simulation = new Simulation(map, Integer.parseInt(delay.getText()), saveToCSVButton.isSelected(), saveCSV.getText());
 
         } else if (e.getActionCommand().equals("save")) {
             String filename = save.getText();
@@ -488,8 +510,6 @@ public class Panel extends JPanel implements ActionListener {
             genomeSize.setText(Integer.toString(customLoader.getGenomeSize()));
             mutationCoefficient.setText(Integer.toString(customLoader.getMutationCoefficient()));
             mutationType.setText(customLoader.getMutationType().toString());
-
         }
-
     }
 }
