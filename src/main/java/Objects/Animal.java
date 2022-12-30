@@ -18,6 +18,7 @@ public class Animal {
     private int genomeIndex;
     private final WorldHandler map;
     private int childCount = 0;
+    private int grassCount = 0;
 
     public Animal(Vector2d pos_, int maxHealth_, int currHealth_, int birthDate_, List<Integer> genome_, WorldHandler map_) {
         birthDate = birthDate_;
@@ -41,6 +42,14 @@ public class Animal {
 
     public int getChildCount() {
         return childCount;
+    }
+
+    public void addGrass() {
+        grassCount += 1;
+    }
+
+    public int getGrassCountCount() {
+        return grassCount;
     }
 
     public String getGenome(){

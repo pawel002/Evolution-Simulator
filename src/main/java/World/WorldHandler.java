@@ -271,6 +271,7 @@ public class WorldHandler {
 
                 Grass grass = hashedGrass.get(animal.getPosition());
                 animal.increaseHealth(grassEnergy);
+                animal.addGrass();
                 removeGrass(animal.getPosition());
                 eatenGrassCount += 1;
             }
@@ -470,30 +471,48 @@ public class WorldHandler {
     }
 
     public int getFreeSpaces(){
-        int sum = 0;
+        int sum = width*height;
         for(int i=0; i<width; i++){
             for(int j=0; j<height; j++){
                 Vector2d pos = new Vector2d(i, j);
                 if(hashedGrass.containsKey(pos)){
-                    sum ++;
+                    sum --;
                     continue;
                 }
                 if(hashedAnimals.containsKey(pos)){
-                    sum ++;
+                    sum --;
                     continue;
                 }
             }
         }
         return sum;
     }
+
+    public int getAnimalsCount(){
+        return animalsList.size();
+    }
+
+    public int getDeadAnimalsCount(){
+        return deadAnimalsList.size();
+    }
+
+    public int getGrassCount(){
+        return hashedGrass.size();
+    }
+
+    public String getDominantGenes(){
+        return "";
+    }
+
+
     public void writeToCSV(String filename, int day) {
         BufferedWriter myWriter = null;
         try {
             myWriter = new BufferedWriter(new FileWriter(String.join("", ".\\reports\\", filename), true));
             myWriter.write(String.join("",
                     "Day,", Integer.toString(day),
-                    ",", Integer.toString(animalsList.size()),
-                    ",", Integer.toString(hashedGrass.size()),
+                    ",", Integer.toString(getAnimalsCount()),
+                    ",", Integer.toString(getGrassCount()),
                     ",", Integer.toString(getFreeSpaces()),
                     ",", Double.toString(getAverageEnergy()),
                     ",", Double.toString(getAverageLifespan()), "\n"));

@@ -5,6 +5,8 @@ import Save.Saver;
 import Simulation.Simulation;
 import World.Settings;
 import World.WorldHandler;
+import Simulation.ThreadHandler;
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
@@ -221,7 +223,7 @@ public class Panel extends JPanel implements ActionListener {
 
         save = new JTextField();
         save.setColumns(SIZE);
-        save.setText("Enter name to save");
+        save.setText("Enter save-file name");
 
         load = new JTextField();
         load.setColumns(SIZE);
@@ -229,7 +231,7 @@ public class Panel extends JPanel implements ActionListener {
 
         saveCSV = new JTextField();
         saveCSV.setColumns(SIZE);
-        saveCSV.setText("N");
+        saveCSV.setText("Enter report name");
 
         //Labels to text fields
         delayLabel.setLabelFor(delay);
@@ -440,9 +442,10 @@ public class Panel extends JPanel implements ActionListener {
                     Settings.getMutationType(mutationType.getText())
             );
 
-
+        // TUTAJ TRZEBA OTWORZYC NOWE OKNO NA OSOBYNM WATKU Z WIZUALIZACJA I PETLA JAK W MAIN
         out.println(String.join(" ", "Started Simulation Number", Integer.toString(simulationCount++)));
-        Simulation simulation = new Simulation(map, Integer.parseInt(delay.getText()), saveToCSVButton.isSelected(), saveCSV.getText());
+        ThreadHandler threadHandler = new ThreadHandler(map, Integer.parseInt(delay.getText()), saveToCSVButton.isSelected(), saveCSV.getText());
+        threadHandler.runThread();
 
         } else if (e.getActionCommand().equals("save")) {
             String filename = save.getText();
@@ -493,13 +496,16 @@ public class Panel extends JPanel implements ActionListener {
             }
 
             delay.setText(Integer.toString(customLoader.getDelay()));
+
             width.setText(Integer.toString(customLoader.getWidth()));
             height.setText(Integer.toString(customLoader.getHeight()));
             worldType.setText(customLoader.getWorldType().toString());
+
             startGrassCount.setText(Integer.toString(customLoader.getStartGrassCount()));
             growingGrassCount.setText(Integer.toString(customLoader.getGrowingGrassCount()));
             grassEnergy.setText(Integer.toString(customLoader.getGrassEnergy()));
             grassType.setText(customLoader.getGrassType().toString());
+
             animalMaxEnergy.setText(Integer.toString(customLoader.getAnimalMaxEnergy()));
             dailyConsumption.setText(Integer.toString(customLoader.getDailyConsumption()));
             startAnimalCount.setText(Integer.toString(customLoader.getStartAnimalCount()));
@@ -507,6 +513,7 @@ public class Panel extends JPanel implements ActionListener {
             birthEnergyLoss.setText(Integer.toString(customLoader.getBirthEnergyLoss()));
             animalReadyEnergy.setText(Integer.toString(customLoader.getAnimalReadyEnergy()));
             animalType.setText(customLoader.getAnimalType().toString());
+
             genomeSize.setText(Integer.toString(customLoader.getGenomeSize()));
             mutationCoefficient.setText(Integer.toString(customLoader.getMutationCoefficient()));
             mutationType.setText(customLoader.getMutationType().toString());

@@ -14,7 +14,7 @@ public class Menu {
 
     }
 
-    public void startSimulation(){
+    public void openMenu(){
         settingsFrame.add(new Panel());
         settingsFrame.setVisible(true);
     }
