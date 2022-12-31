@@ -230,7 +230,7 @@ public class Simulation implements ActionListener {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 AnimalInfo AI = new AnimalInfo(map.getAnimalAt(pos));
-                                if(AI.set(dayCount++, simNumber, animalInfoCount)){
+                                if(AI.set(dayCount, simNumber, animalInfoCount++)){
                                     animalInfoList.add(AI);
                                 }
                             }
