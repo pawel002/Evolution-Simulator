@@ -94,7 +94,7 @@ public class WorldHandler {
             int x = ThreadLocalRandom.current().nextInt(0, width);
             int y = ThreadLocalRandom.current().nextInt(0, height);
             Vector2d pos = new Vector2d(x, y);
-            if (!this.isOccupied(pos)) {
+            if (this.isOccupied(pos) == 0) {
                 // generate genome
                 List<Integer> genome = new ArrayList<>();
                 for (int i = 0; i < genomeSize; i++) {
@@ -392,8 +392,10 @@ public class WorldHandler {
         return birthEnergyLoss;
     }
 
-    public boolean isOccupied(Vector2d pos) {
-        return hashedAnimals.containsKey(pos) || hashedGrass.containsKey(pos);
+    public int isOccupied(Vector2d pos) {
+        if(hashedAnimals.containsKey(pos)) return 1;
+        else if (hashedGrass.containsKey(pos)) return 2;
+        return 0;
     }
 
     public int getWidth() {
@@ -486,6 +488,13 @@ public class WorldHandler {
             }
         }
         return sum;
+    }
+
+    public Animal getAnimalAt(Vector2d pos){
+        if(hashedAnimals.containsKey(pos)){
+            return hashedAnimals.get(pos).get(0);
+        }
+        return null;
     }
 
     public int getAnimalsCount(){
@@ -583,6 +592,10 @@ public class WorldHandler {
             ans.append("|");
         }
         return ans.toString();
+    }
+
+    public boolean isJungle(Vector2d pos) {
+        return (hashedJungle.contains(pos));
     }
 
 

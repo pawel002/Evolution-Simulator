@@ -48,21 +48,17 @@ public class Animal {
         grassCount += 1;
     }
 
-    public int getGrassCountCount() {
+    public int getGrassCount() {
         return grassCount;
     }
 
-    public String getGenome(){
-        StringBuilder res = new StringBuilder();
-        for(int x : genome){
-            res.append(x);
-        }
-        return res.toString();
-    }
+    public int getMaxHealth() { return maxHealth;}
 
     public int getGenomeAt(int i) {
         return genome.get(i);
     }
+
+    public int getDeathDate() { return deathDate;}
 
     public int getCurrHealth() {
         return currHealth;
@@ -78,6 +74,20 @@ public class Animal {
 
     public int getGenomeSize() {
         return genome.size();
+    }
+
+    public String getGenome(){
+        StringBuilder res = new StringBuilder();
+        int j;
+        res.append("[");
+        for(int i = 0; i < genome.size(); i++){
+            j = (genomeIndex + i) % genome.size();
+            res.append(genome.get(j));
+            if(i < genome.size() - 1)
+                res.append(", ");
+        }
+        res.append("]");
+        return res.toString();
     }
 
     // returns position

@@ -5,12 +5,6 @@ import Save.Saver;
 import Simulation.Simulation;
 import World.Settings;
 import World.WorldHandler;
-import Simulation.ThreadHandler;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.control.CheckBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.out;
 
@@ -98,10 +94,14 @@ public class Panel extends JPanel implements ActionListener {
     // button
     private JButton startButton;
 
+    private List<Simulation> simList = new ArrayList<Simulation>();
+    private List<WorldHandler> mapList = new ArrayList<WorldHandler>();
+
     // checkbox
     JCheckBox saveToCSVButton;
 
     public Panel() {
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
@@ -138,7 +138,7 @@ public class Panel extends JPanel implements ActionListener {
         // SAVING
         saveLabel = new JLabel("Save (filename - string):           ");
         loadLabel = new JLabel("Load (filename - string):           ");
-        saveCSVLabel = new JLabel("Save to CSV:  ");
+        saveCSVLabel = new JLabel("Save to CSV (check - yes):  ");
 
         // LOAD DEFAULT !!!
         Loader defaultLoader = new Loader();
@@ -442,10 +442,14 @@ public class Panel extends JPanel implements ActionListener {
                     Settings.getMutationType(mutationType.getText())
             );
 
-        // TUTAJ TRZEBA OTWORZYC NOWE OKNO NA OSOBYNM WATKU Z WIZUALIZACJA I PETLA JAK W MAIN
-        out.println(String.join(" ", "Started Simulation Number", Integer.toString(simulationCount++)));
-        ThreadHandler threadHandler = new ThreadHandler(map, Integer.parseInt(delay.getText()), saveToCSVButton.isSelected(), saveCSV.getText());
-        threadHandler.runThread();
+            out.println(String.join(" ", "Started Simulation Number", Integer.toString(simulationCount)));
+            Simulation sim = new Simulation(map, Integer.parseInt(delay.getText()), saveToCSVButton.isSelected(), saveCSV.getText(), simulationCount++);
+            try {
+                sim.run();
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
 
         } else if (e.getActionCommand().equals("save")) {
             String filename = save.getText();
@@ -517,6 +521,8 @@ public class Panel extends JPanel implements ActionListener {
             genomeSize.setText(Integer.toString(customLoader.getGenomeSize()));
             mutationCoefficient.setText(Integer.toString(customLoader.getMutationCoefficient()));
             mutationType.setText(customLoader.getMutationType().toString());
+
+            out.print("Loaded Successfully");
         }
     }
 }
