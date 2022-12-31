@@ -104,6 +104,7 @@ public class Simulation implements ActionListener {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+
         animalPic = this.resize(animalPic, CELL);
         grassPic = this.resize(grassPic, CELL);
 
@@ -112,12 +113,12 @@ public class Simulation implements ActionListener {
         JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         mainPanel.setResizeWeight(0.7);
 
-        JPanel LeftPanel = new JPanel(new GridLayout(14, 1));
+        JPanel LeftPanel = new JPanel(new GridLayout(5, 1));
         LeftPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         LeftPanel.setBorder(blackline);
 
-        JPanel RightPanel = new JPanel();
-        RightPanel.setLayout(new BoxLayout(RightPanel, BoxLayout.Y_AXIS));
+        JSplitPane RightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        RightPanel.setResizeWeight(1);
 
         mainPanel.add(LeftPanel);
         mainPanel.add(RightPanel);
@@ -133,6 +134,9 @@ public class Simulation implements ActionListener {
         simGrid.setBorder(blackline);
 //        simGrid.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         RightPanel.add(simGrid);
+
+        JPanel RightLowerPanel = new JPanel();
+        RightLowerPanel.setLayout(new BoxLayout(RightLowerPanel, BoxLayout.Y_AXIS));
 
         JPanel buttonPanel = new JPanel();
         JButton pauseButton = new JButton("Pause");
@@ -150,7 +154,50 @@ public class Simulation implements ActionListener {
         buttonPanel.add(pauseButton);
         buttonPanel.add(unpauseButton);
 
-        RightPanel.add(buttonPanel);
+        RightLowerPanel.add(buttonPanel);
+
+        JPanel legend = new JPanel(new GridLayout(2, 2));
+        legend.setPreferredSize(new Dimension(100, 100));
+
+        JPanel animal = new JPanel();
+        JPanel grass = new JPanel();
+        JPanel jungle = new JPanel();
+        JPanel dune = new JPanel();
+
+        BufferedImage myPicture = animalPic;
+        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+        animal.add(picLabel);
+
+        myPicture = grassPic;
+        picLabel = new JLabel(new ImageIcon(myPicture));
+        grass.add(picLabel);
+
+        JPanel jungleSquare = new JPanel();
+        JPanel duneSquare = new JPanel();
+
+        jungleSquare.setPreferredSize(new Dimension(20, 20));
+        duneSquare.setPreferredSize(new Dimension(20, 20));
+
+        jungleSquare.setBackground(Color.orange);
+        duneSquare.setBackground(Color.blue);
+
+        jungle.add(jungleSquare);
+        dune.add(duneSquare);
+
+        jungle.add(new JLabel(" - Jungle Square"));
+        dune.add(new JLabel(" - Dune Square"));
+        animal.add(new JLabel(" - Animal"));
+        grass.add(new JLabel(" - Grass"));
+
+        legend.add(jungle);
+        legend.add(dune);
+        legend.add(animal);
+        legend.add(grass);
+
+        RightLowerPanel.add(legend);
+        RightPanel.add(RightLowerPanel);
+
+        // add graphs to leftpanel
     }
 
     @Override
