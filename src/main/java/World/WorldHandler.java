@@ -3,6 +3,7 @@ package World;
 import Objects.Animal;
 import Objects.Grass;
 import Objects.Vector2d;
+import javafx.util.Pair;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.System.out;
 
@@ -60,7 +60,7 @@ public class WorldHandler {
     int eatenGrass;
 
     // world defined kids count
-    int kidsCount=0;
+    int kidsCount = 0;
 
 
     public WorldHandler(int width_, int height_, Settings.WorldType worldType_,
@@ -79,7 +79,6 @@ public class WorldHandler {
 
         animalMaxEnergy = animalMaxEnergy_;
         dailyConsumption = dailyConsumption_;
-        startAnimalCount = startAnimalCount_;
         startAnimalEnergy = startAnimalEnergy_;
         birthEnergyLoss = birthEnergyLoss_;
         animalReadyEnergy = animalReadyEnergy_;
@@ -90,6 +89,8 @@ public class WorldHandler {
         mutationType = mutationType_;
 
         // placing animals
+        startAnimalCount = min(startAnimalCount_, width*height);
+
         while (animalsList.size() < startAnimalCount) {
             int x = ThreadLocalRandom.current().nextInt(0, width);
             int y = ThreadLocalRandom.current().nextInt(0, height);
@@ -112,8 +113,8 @@ public class WorldHandler {
         startGrassCount = min(startGrassCount, width * height - startAnimalCount);
 
         // fill hashed death count
-        for(int i = 0; i<height; i++){
-            for(int j=0 ; j<width; j++){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 hashedDeathCount.put(new Vector2d(j, i), 0);
             }
         }
@@ -121,10 +122,10 @@ public class WorldHandler {
         // 0 when equator
         if (grassType == Settings.GrassType.EQUATOR) {
             // define jungle spots 2/5 -> 3/5
-            for(int i = 0; i<height; i++){
-                for(int j=0 ; j<width; j++){
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
                     Vector2d v = new Vector2d(j, i);
-                    if((height * 2) / 5 <= i && i < (height * 3) / 5){
+                    if ((height * 2) / 5 <= i && i < (height * 3) / 5) {
                         hashedJungle.add(v);
                         freeJungle.add(v);
                     } else {
@@ -134,26 +135,26 @@ public class WorldHandler {
             }
         } else {
             // we can use freeJungle as handler of free squares for placing grass in toxic variant
-            for(int i = 0; i<height; i++){
-                for(int j=0 ; j<width; j++){
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
                     freeJungle.add(new Vector2d(j, i));
                 }
             }
         }
 
         // add grass
-        for(int i=0; i< startGrassCount; i++)
+        for (int i = 0; i < startGrassCount; i++)
             this.addGrass();
 
     }
 
     // adds single grass
-    public boolean addGrass(){
+    public boolean addGrass() {
         // when we spawn the grass using equator option
-        if (grassType == Settings.GrassType.EQUATOR){
+        if (grassType == Settings.GrassType.EQUATOR) {
             // if x == 0 then we take less preferable spot
             int x = ThreadLocalRandom.current().nextInt(0, 5);
-            if((x == 0 || freeJungle.isEmpty()) && !freeDune.isEmpty() ){
+            if ((x == 0 || freeJungle.isEmpty()) && !freeDune.isEmpty()) {
                 int index = ThreadLocalRandom.current().nextInt(0, freeDune.size());
                 Vector2d v = freeDune.get(index);
                 freeDune.remove(index);
@@ -161,7 +162,7 @@ public class WorldHandler {
                 Grass grass = new Grass(v);
                 hashedGrass.put(v, grass);
                 return true;
-            } else if (!freeJungle.isEmpty()){
+            } else if (!freeJungle.isEmpty()) {
                 // preferable spot
                 int index = ThreadLocalRandom.current().nextInt(0, freeJungle.size());
                 Vector2d v = freeJungle.get(index);
@@ -172,11 +173,11 @@ public class WorldHandler {
                 return true;
             }
             return false;
-        // when we spawn the grass using toxic fields option
+            // when we spawn the grass using toxic fields option
         } else {
             // we need to iterate over entire map randomly to get a
             // square without grass with the lowest death count
-            if(hashedGrass.size() == width*height){
+            if (hashedGrass.size() == width * height) {
                 return false;
             }
 
@@ -184,10 +185,10 @@ public class WorldHandler {
 
             int deathCount = 999999;
             Vector2d grassPosition = new Vector2d(-1, -1);
-            for(Vector2d vec : freeJungle){
-                if (!hashedGrass.containsKey(vec)){
+            for (Vector2d vec : freeJungle) {
+                if (!hashedGrass.containsKey(vec)) {
                     int currDeathCount = hashedDeathCount.get(vec);
-                    if (currDeathCount < deathCount){
+                    if (currDeathCount < deathCount) {
                         deathCount = currDeathCount;
                         grassPosition = vec;
                     }
@@ -201,21 +202,21 @@ public class WorldHandler {
         }
     }
 
-    public void removeGrass(Vector2d pos){
+    public void removeGrass(Vector2d pos) {
         // when we spawn the grass using equator option
-        if(grassType == Settings.GrassType.EQUATOR){
-            if(!hashedGrass.containsKey(pos)){
+        if (grassType == Settings.GrassType.EQUATOR) {
+            if (!hashedGrass.containsKey(pos)) {
                 return;
             }
             hashedGrass.remove(pos);
-            if(hashedJungle.contains(pos)){
+            if (hashedJungle.contains(pos)) {
                 freeJungle.add(pos);
             } else {
                 freeDune.add(pos);
             }
-        // when we spawn the grass using toxic fields option
+            // when we spawn the grass using toxic fields option
         } else {
-            if(!hashedGrass.containsKey(pos)){
+            if (!hashedGrass.containsKey(pos)) {
                 return;
             }
             freeJungle.add(pos);
@@ -292,7 +293,7 @@ public class WorldHandler {
                 currAnimalList.get(0).addChild();
                 currAnimalList.get(1).addChild();
 
-                kidsCount ++;
+                kidsCount++;
                 animalsList.add(child);
                 currAnimalList.add(child);
 
@@ -316,7 +317,7 @@ public class WorldHandler {
                     }
                 }
 
-                if(animal1.getCurrHealth() >= animalReadyEnergy && animal2.getCurrHealth() >= animalReadyEnergy){
+                if (animal1.getCurrHealth() >= animalReadyEnergy && animal2.getCurrHealth() >= animalReadyEnergy) {
                     Animal child = new Animal(animal1.getPosition(), animalMaxEnergy, 2 * birthEnergyLoss, currDate,
                             childGenome(animal1, animal2), this);
                     animal1.decreaseHealth(birthEnergyLoss);
@@ -324,7 +325,7 @@ public class WorldHandler {
                     animal1.addChild();
                     animal2.addChild();
 
-                    kidsCount ++;
+                    kidsCount++;
                     animalsList.add(child);
                     currAnimalList.add(child);
                 }
@@ -335,7 +336,7 @@ public class WorldHandler {
     public void growGrass() {
         int grassAddedCount = 0;
         while (grassAddedCount < growingGrassCount && addGrass())
-            grassAddedCount ++;
+            grassAddedCount++;
     }
 
     public List<Integer> childGenome(Animal animal1, Animal animal2) {
@@ -381,7 +382,7 @@ public class WorldHandler {
             for (int i = 0; i < mutationCoefficient; i++) {
                 int idx = rand.nextInt(list.size());
                 int arrIdx = list.remove(idx);
-                int newVal = ((childGenome.get(arrIdx) + ThreadLocalRandom.current().nextInt(0, 2) * 2 - 1) + 8 ) % 8;
+                int newVal = ((childGenome.get(arrIdx) + ThreadLocalRandom.current().nextInt(0, 2) * 2 - 1) + 8) % 8;
                 childGenome.set(arrIdx, newVal);
             }
         }
@@ -393,7 +394,7 @@ public class WorldHandler {
     }
 
     public int isOccupied(Vector2d pos) {
-        if(hashedAnimals.containsKey(pos)) return 1;
+        if (hashedAnimals.containsKey(pos)) return 1;
         else if (hashedGrass.containsKey(pos)) return 2;
         return 0;
     }
@@ -414,7 +415,6 @@ public class WorldHandler {
         return animalType;
     }
 
-
     public void removeHashedAnimal(Animal animal) {
         if (hashedAnimals.containsKey(animal.getPosition())) {
             hashedAnimals.get(animal.getPosition()).remove(animal);
@@ -434,14 +434,14 @@ public class WorldHandler {
     }
 
     // debug add animal to map
-    public void addAnimal(Animal animal){
+    public void addAnimal(Animal animal) {
         addHashedAnimal(animal);
         animalsList.add(animal);
     }
 
-    public void addGrass(Grass grass){
+    public void addGrass(Grass grass) {
         hashedGrass.put(grass.getPosition(), grass);
-        if (grassType == Settings.GrassType.EQUATOR){
+        if (grassType == Settings.GrassType.EQUATOR) {
             freeJungle.remove(grass.getPosition());
             freeDune.remove(grass.getPosition());
         } else {
@@ -450,39 +450,39 @@ public class WorldHandler {
 
     }
 
-    public double getAverageEnergy(){
-        if(animalsList.isEmpty()){
+    public double getAverageEnergy() {
+        if (animalsList.isEmpty()) {
             return -1;
         }
         int sum = 0;
-        for(Animal a : animalsList){
+        for (Animal a : animalsList) {
             sum += a.getCurrHealth();
         }
         return (double) sum / (double) animalsList.size();
     }
 
-    public double getAverageLifespan(){
-        if(deadAnimalsList.isEmpty()){
+    public double getAverageLifespan() {
+        if (deadAnimalsList.isEmpty()) {
             return -1;
         }
         int sum = 0;
-        for(Animal a : deadAnimalsList){
+        for (Animal a : deadAnimalsList) {
             sum += a.getAge(-1);
         }
         return (double) sum / (double) deadAnimalsList.size();
     }
 
-    public int getFreeSpaces(){
-        int sum = width*height;
-        for(int i=0; i<width; i++){
-            for(int j=0; j<height; j++){
+    public int getFreeSpaces() {
+        int sum = width * height;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 Vector2d pos = new Vector2d(i, j);
-                if(hashedGrass.containsKey(pos)){
-                    sum --;
+                if (hashedGrass.containsKey(pos)) {
+                    sum--;
                     continue;
                 }
-                if(hashedAnimals.containsKey(pos)){
-                    sum --;
+                if (hashedAnimals.containsKey(pos)) {
+                    sum--;
                     continue;
                 }
             }
@@ -490,27 +490,54 @@ public class WorldHandler {
         return sum;
     }
 
-    public Animal getAnimalAt(Vector2d pos){
-        if(hashedAnimals.containsKey(pos)){
+    public Animal getAnimalAt(Vector2d pos) {
+        if (hashedAnimals.containsKey(pos)) {
             return hashedAnimals.get(pos).get(0);
         }
         return null;
     }
 
-    public int getAnimalsCount(){
+    public int getAnimalsCount() {
         return animalsList.size();
     }
 
-    public int getDeadAnimalsCount(){
+    public int getDeadAnimalsCount() {
         return deadAnimalsList.size();
     }
 
-    public int getGrassCount(){
+    public int getGrassCount() {
         return hashedGrass.size();
     }
 
-    public String getDominantGenes(){
-        return "";
+    public String getDominantGenes() {
+
+        int[] counter = {0, 0, 0, 0, 0, 0, 0, 0};
+        for (Animal a : animalsList) {
+            for (int i = 0; i < a.getGenomeSize(); i++) {
+                counter[a.getGenomeAt(i)] += 1;
+            }
+        }
+
+        List<Pair<Integer, Integer>> storage = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            storage.add(new Pair<>(i, counter[i]));
+        }
+
+        storage.sort(new Comparator<Pair<Integer, Integer>>() {
+            @Override
+            public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {
+                return -1 * o1.getValue().compareTo(o2.getValue());
+            }
+        });
+
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            res.append(Integer.toString(storage.get(i).getKey()));
+            if (i < 7)
+                res.append(", ");
+        }
+
+        return res.toString();
     }
 
 
@@ -519,7 +546,7 @@ public class WorldHandler {
         try {
             myWriter = new BufferedWriter(new FileWriter(String.join("", ".\\reports\\", filename), true));
             myWriter.write(String.join("",
-                    "Day,", Integer.toString(day),
+                    Integer.toString(day),
                     ",", Integer.toString(getAnimalsCount()),
                     ",", Integer.toString(getGrassCount()),
                     ",", Integer.toString(getFreeSpaces()),
@@ -596,6 +623,10 @@ public class WorldHandler {
 
     public boolean isJungle(Vector2d pos) {
         return (hashedJungle.contains(pos));
+    }
+
+    public int getAnimalMaxEnergy() {
+        return animalMaxEnergy;
     }
 
 

@@ -1,22 +1,4 @@
 import Menu.Menu;
-import Objects.Vector2d;
-import Objects.Animal;
-import Save.Loader;
-import Save.Saver;
-import Simulation.AnimalInfo;
-import World.Settings;
-import World.WorldHandler;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static java.lang.System.out;
-import static java.lang.Thread.sleep;
 
 // DONE
 // - inicjalizacja mapy - zwierzeta i trawa na siebie nie nachodzą
@@ -32,13 +14,13 @@ import static java.lang.Thread.sleep;
 
 // interface:
 // settings
-// zapisywanie działa
+// zapisywanie / wczytywanie
 
 
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         Menu menu = new Menu();
         menu.openMenu();

@@ -75,37 +75,37 @@ public class AnimalInfo {
         eatenGrassData = new JLabel(Integer.toString(animal.getGrassCount()));
         numberOfKidsData = new JLabel(Integer.toString(animal.getChildCount()));
 
-        JPanel l1 = new JPanel();
-        JPanel l2 = new JPanel();
-        JPanel l3 = new JPanel();
-        JPanel l4 = new JPanel();
-        JPanel l5 = new JPanel();
-        JPanel l6 = new JPanel();
-        JPanel l7 = new JPanel();
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
+        JPanel panel4 = new JPanel();
+        JPanel panel5 = new JPanel();
+        JPanel panel6 = new JPanel();
+        JPanel panel7 = new JPanel();
 
-        l1.add(isAliveLabel);
-        l2.add(energyLabel);
-        l3.add(birthDateLabel);
-        l4.add(ageLabel);
-        l5.add(genomeLabel);
-        l6.add(eatenGrassLabel);
-        l7.add(numberOfKidsLabel);
+        panel1.add(isAliveLabel);
+        panel2.add(energyLabel);
+        panel3.add(birthDateLabel);
+        panel4.add(ageLabel);
+        panel5.add(genomeLabel);
+        panel6.add(eatenGrassLabel);
+        panel7.add(numberOfKidsLabel);
 
-        l1.add(isAliveData);
-        l2.add(energyData);
-        l3.add(birthDateData);
-        l4.add(ageData);
-        l5.add(genomeData);
-        l6.add(eatenGrassData);
-        l7.add(numberOfKidsData);
+        panel1.add(isAliveData);
+        panel2.add(energyData);
+        panel3.add(birthDateData);
+        panel4.add(ageData);
+        panel5.add(genomeData);
+        panel6.add(eatenGrassData);
+        panel7.add(numberOfKidsData);
 
-        mainPanel.add(l1);
-        mainPanel.add(l2);
-        mainPanel.add(l3);
-        mainPanel.add(l4);
-        mainPanel.add(l5);
-        mainPanel.add(l6);
-        mainPanel.add(l7);
+        mainPanel.add(panel1);
+        mainPanel.add(panel2);
+        mainPanel.add(panel3);
+        mainPanel.add(panel4);
+        mainPanel.add(panel5);
+        mainPanel.add(panel6);
+        mainPanel.add(panel7);
 
         return true;
     }

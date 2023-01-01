@@ -5,18 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56813896-4263-4435-a6e3-cbef190dffa8" name="Changes" comment="feelsstrongman">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Simulation/Stats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Menu/Panel.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Menu/Panel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Simulation/AnimalInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Simulation/AnimalInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Simulation/Simulation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$AnimalType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$AnimalType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$GrassType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$GrassType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings$MutationType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings$MutationType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/Settings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/World/WorldHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/World/WorldHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configsaves/lol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configsaves/default2" beforeDir="false" afterPath="$PROJECT_DIR$/configsaves/default2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Menu/Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Menu/Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Objects/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Objects/Animal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Simulation/AnimalInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Simulation/AnimalInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Simulation/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Simulation/Simulation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/World/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/World/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/World/WorldHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/World/WorldHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,17 +102,21 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;B:/AGH 3 SEM/OOP-Project&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/xgame/Desktop/Nowy folder/OOP-Project/lib/xchart-3.6.5.jar&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.4597701&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
 }</component>
@@ -109,7 +134,7 @@
       <recent name="agh.ics.oop" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main (1)">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="agh.ics.oop.gui.App" />
       <module name="oolab.main" />
@@ -123,9 +148,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="org.example.oolab.main" />
+      <module name="oolab.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -184,7 +209,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Main (1)" />
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.App" />
       <item itemvalue="Gradle.WorldTest.Animal_Test_Rotation" />
@@ -192,7 +216,7 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main (1)" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.WorldTest" />
         <item itemvalue="Gradle.WorldTest.Animal_Test_Rotation" />
@@ -210,6 +234,8 @@
       <updated>1665316822566</updated>
       <workItem from="1672449851852" duration="12033000" />
       <workItem from="1672490852079" duration="2612000" />
+      <workItem from="1672520033370" duration="23687000" />
+      <workItem from="1672581929985" duration="2471000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1665317049771</created>
@@ -379,14 +405,7 @@
       <option name="project" value="LOCAL" />
       <updated>1672504853388</updated>
     </task>
-    <task id="LOCAL-00025" summary="feelsstrongman">
-      <created>1672505397632</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1672505397632</updated>
-    </task>
-    <option name="localTasksCounter" value="26" />
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

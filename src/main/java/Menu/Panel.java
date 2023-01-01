@@ -286,80 +286,80 @@ public class Panel extends JPanel implements ActionListener {
 
         add(mainPanel);
 
-        JPanel l1 = new JPanel();
-        JPanel l2 = new JPanel();
-        JPanel l3 = new JPanel();
-        JPanel l4 = new JPanel();
-        JPanel l5 = new JPanel();
-        JPanel l6 = new JPanel();
-        JPanel l7 = new JPanel();
-        JPanel l8 = new JPanel();
-        JPanel l9 = new JPanel();
-        JPanel l10 = new JPanel();
-        JPanel l11 = new JPanel();
-        JPanel l12 = new JPanel();
-        JPanel l13 = new JPanel();
-        JPanel l14 = new JPanel();
-        JPanel l15 = new JPanel();
-        JPanel l16 = new JPanel();
-        JPanel l17 = new JPanel();
-        JPanel l18 = new JPanel();
-        JPanel l19 = new JPanel();
-        JPanel l20 = new JPanel();
-        JPanel l21 = new JPanel();
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
+        JPanel panel4 = new JPanel();
+        JPanel panel5 = new JPanel();
+        JPanel panel6 = new JPanel();
+        JPanel panel7 = new JPanel();
+        JPanel panel8 = new JPanel();
+        JPanel panel9 = new JPanel();
+        JPanel panel10 = new JPanel();
+        JPanel panel11 = new JPanel();
+        JPanel panel12 = new JPanel();
+        JPanel panel13 = new JPanel();
+        JPanel panel14 = new JPanel();
+        JPanel panel15 = new JPanel();
+        JPanel panel16 = new JPanel();
+        JPanel panel17 = new JPanel();
+        JPanel panel18 = new JPanel();
+        JPanel panel19 = new JPanel();
+        JPanel panel20 = new JPanel();
+        JPanel panel21 = new JPanel();
 
 
-        l1.add(delayLabel);
-        l2.add(widthLabel);
-        l3.add(heightLabel);
-        l4.add(worldTypeLabel);
-        l5.add(startGrassCountLabel);
-        l6.add(growingGrassCountLabel);
-        l7.add(grassEnergyLabel);
-        l8.add(grassTypeLabel);
-        l9.add(animalMaxEnergyLabel);
-        l10.add(dailyConsumptionLabel);
-        l11.add(startAnimalCountLabel);
-        l12.add(startAnimalEnergyLabel);
-        l13.add(birthEnergyLossLabel);
-        l14.add(animalReadyEnergyLabel);
-        l15.add(animalTypeLabel);
-        l16.add(genomeSizeLabel);
-        l17.add(mutationCoefficientLabel);
-        l18.add(mutationTypeLabel);
-        l19.add(saveLabel);
-        l20.add(loadLabel);
-        l21.add(saveCSVLabel);
+        panel1.add(delayLabel);
+        panel2.add(widthLabel);
+        panel3.add(heightLabel);
+        panel4.add(worldTypeLabel);
+        panel5.add(startGrassCountLabel);
+        panel6.add(growingGrassCountLabel);
+        panel7.add(grassEnergyLabel);
+        panel8.add(grassTypeLabel);
+        panel9.add(animalMaxEnergyLabel);
+        panel10.add(dailyConsumptionLabel);
+        panel11.add(startAnimalCountLabel);
+        panel12.add(startAnimalEnergyLabel);
+        panel13.add(birthEnergyLossLabel);
+        panel14.add(animalReadyEnergyLabel);
+        panel15.add(animalTypeLabel);
+        panel16.add(genomeSizeLabel);
+        panel17.add(mutationCoefficientLabel);
+        panel18.add(mutationTypeLabel);
+        panel19.add(saveLabel);
+        panel20.add(loadLabel);
+        panel21.add(saveCSVLabel);
 
-        l1.add(delay);
-        l2.add(width);
-        l3.add(height);
-        l4.add(worldType);
-        l5.add(startGrassCount);
-        l6.add(growingGrassCount);
-        l7.add(grassEnergy);
-        l8.add(grassType);
-        l9.add(animalMaxEnergy);
-        l10.add(dailyConsumption);
-        l11.add(startAnimalCount);
-        l12.add(startAnimalEnergy);
-        l13.add(birthEnergyLoss);
-        l14.add(animalReadyEnergy);
-        l15.add(animalType);
-        l16.add(genomeSize);
-        l17.add(mutationCoefficient);
-        l18.add(mutationType);
-        l19.add(save);
-        l20.add(load);
+        panel1.add(delay);
+        panel2.add(width);
+        panel3.add(height);
+        panel4.add(worldType);
+        panel5.add(startGrassCount);
+        panel6.add(growingGrassCount);
+        panel7.add(grassEnergy);
+        panel8.add(grassType);
+        panel9.add(animalMaxEnergy);
+        panel10.add(dailyConsumption);
+        panel11.add(startAnimalCount);
+        panel12.add(startAnimalEnergy);
+        panel13.add(birthEnergyLoss);
+        panel14.add(animalReadyEnergy);
+        panel15.add(animalType);
+        panel16.add(genomeSize);
+        panel17.add(mutationCoefficient);
+        panel18.add(mutationType);
+        panel19.add(save);
+        panel20.add(load);
 
         saveToCSVButton = new JCheckBox();
         saveToCSVButton.setSelected(false);
 
-        l21.add(saveToCSVButton);
-        l21.add(saveCSV);
+        panel21.add(saveToCSVButton);
+        panel21.add(saveCSV);
 
-        l19.add(saveButton);
-        l20.add(loadButton);
+        panel19.add(saveButton);
+        panel20.add(loadButton);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(startButton);
@@ -368,47 +368,47 @@ public class Panel extends JPanel implements ActionListener {
         JPanel simSettings = new JPanel();
         simSettings.add(new JLabel("Simulation settings"));
         LeftPanel.add(simSettings);
-        LeftPanel.add(l1);
+        LeftPanel.add(panel1);
 
         JPanel mapSettings = new JPanel();
         mapSettings.add(new JLabel("Map settings"));
         LeftPanel.add(mapSettings);
-        LeftPanel.add(l2);
-        LeftPanel.add(l3);
-        LeftPanel.add(l4);
+        LeftPanel.add(panel2);
+        LeftPanel.add(panel3);
+        LeftPanel.add(panel4);
 
         JPanel grassSettings = new JPanel();
         grassSettings.add(new JLabel("Grass settings"));
         RightPanel.add(grassSettings);
-        RightPanel.add(l5);
-        RightPanel.add(l6);
-        RightPanel.add(l7);
-        RightPanel.add(l8);
+        RightPanel.add(panel5);
+        RightPanel.add(panel6);
+        RightPanel.add(panel7);
+        RightPanel.add(panel8);
 
         JPanel animalSettings = new JPanel();
         animalSettings.add(new JLabel("Animal settings"));
         LeftPanel.add(animalSettings);
-        LeftPanel.add(l9);
-        LeftPanel.add(l10);
-        LeftPanel.add(l11);
-        LeftPanel.add(l12);
-        LeftPanel.add(l13);
-        LeftPanel.add(l14);
-        LeftPanel.add(l15);
+        LeftPanel.add(panel9);
+        LeftPanel.add(panel10);
+        LeftPanel.add(panel11);
+        LeftPanel.add(panel12);
+        LeftPanel.add(panel13);
+        LeftPanel.add(panel14);
+        LeftPanel.add(panel15);
 
         JPanel mutationSettings = new JPanel();
         mutationSettings.add(new JLabel("Mutation settings"));
         RightPanel.add(mutationSettings);
-        RightPanel.add(l16);
-        RightPanel.add(l17);
-        RightPanel.add(l18);
+        RightPanel.add(panel16);
+        RightPanel.add(panel17);
+        RightPanel.add(panel18);
 
         JPanel saveSettings = new JPanel();
         saveSettings.add(new JLabel("SAVE / LOAD"));
         RightPanel.add(saveSettings);
-        RightPanel.add(l19);
-        RightPanel.add(l20);
-        RightPanel.add(l21);
+        RightPanel.add(panel19);
+        RightPanel.add(panel20);
+        RightPanel.add(panel21);
 
         RightPanel.add(buttonPanel);
 
@@ -417,7 +417,7 @@ public class Panel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getActionCommand().equals("start")){
+        if (e.getActionCommand().equals("start")) {
 
             WorldHandler map = new WorldHandler(
                     Integer.parseInt(width.getText()),
@@ -453,7 +453,7 @@ public class Panel extends JPanel implements ActionListener {
 
         } else if (e.getActionCommand().equals("save")) {
             String filename = save.getText();
-            if(filename.equals("default")){
+            if (filename.equals("default")) {
                 out.print("Cannot overwrite default");
                 return;
             }

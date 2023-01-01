@@ -1,22 +1,15 @@
 package Simulation;
 
-import Simulation.AnimalInfo;
-
-import World.WorldHandler;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
 import Objects.Animal;
-import Objects.Grass;
 import Objects.Vector2d;
+import World.WorldHandler;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,11 +20,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import static java.lang.String.valueOf;
-import static java.lang.System.out;
-import static java.lang.Thread.sleep;
 
 public class Simulation implements ActionListener {
 
@@ -43,19 +34,25 @@ public class Simulation implements ActionListener {
     public int simNumber;
     public int animalInfoCount = 1;
 
-    public java.util.List<AnimalInfo> animalInfoList = new ArrayList<>();
+    public List<AnimalInfo> animalInfoList = new ArrayList<>();
 
     private int dayCount=1;
 
-    public int WIDTH = 1200;
+    public int WIDTH = 1600;
     public final int HEIGHT = 1000;
     private final int  CELL = 15;
+    private Stats statsPanel;
+    public JFrame mainFrame;
     private JLabel daLabel = new JLabel();
     private JPanel simGrid = new JPanel();
     BufferedImage animalPic = null;
     BufferedImage grassPic = null;
     Timer timer;
 
+    private org.knowm.xchart.XYChart chart;
+    private List<Integer> animalCount = new ArrayList<>();
+    private List<Integer> grassCount = new ArrayList<>();
+    private List<Integer> freeCount = new ArrayList<>();
 
     public Simulation(WorldHandler map_, int delay_, boolean writeToCSV_, String filename_, int SimulationNumber){
         map = map_;
@@ -67,6 +64,7 @@ public class Simulation implements ActionListener {
         if(writeToCSV){
             try {
                 FileWriter clearer = new FileWriter(String.join("", ".\\reports\\", filename));
+                clearer.write(String.join(",", "DAY", "ANIMAL COUNT", "GRASS COUNT", "FREE SPACES", "AVERAGE ENERGY", "AVERAGE LIFESPAN"));
                 clearer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -76,67 +74,59 @@ public class Simulation implements ActionListener {
 
 
     public void run() throws InterruptedException {
-        JFrame settingsFrame = new JFrame(String.join(" ", "Evolution Simulator", Integer.toString(simNumber)));
-        settingsFrame.setSize(1200, 1000);
+        mainFrame = new JFrame(String.join(" ", "Evolution Simulator", Integer.toString(simNumber)));
+        mainFrame.setSize(1600, 1000);
 
         timer = new Timer(delay, this);
         timer.setActionCommand("update");
         timer.start();
 
-        settingsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        settingsFrame.addWindowListener(new WindowAdapter() {
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 timer.stop();
             }
         });
 
-        settingsFrame.setLocationRelativeTo(null);
-        settingsFrame.setVisible(true);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setVisible(true);
         panel = new JPanel();
-        settingsFrame.add(panel);
+        mainFrame.add(panel);
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         try {
-            animalPic = ImageIO.read(new File("src/main/resources/animal.png"));
-            grassPic = ImageIO.read(new File("src/main/resources/grass.png"));
+            animalPic = ImageIO.read(new File("src/main/resources/newAnimal.png"));
+            grassPic = ImageIO.read(new File("src/main/resources/newGrass.png"));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
         animalPic = this.resize(animalPic, CELL);
         grassPic = this.resize(grassPic, CELL);
 
         Border blackline = BorderFactory.createLineBorder(Color.black);
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        mainPanel.setResizeWeight(0.7);
+        mainPanel.setResizeWeight(0.2d);
 
-        JPanel LeftPanel = new JPanel(new GridLayout(5, 1));
+        JPanel LeftPanel = new JPanel();
+        LeftPanel.setLayout(new BoxLayout(LeftPanel, BoxLayout.Y_AXIS));
         LeftPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         LeftPanel.setBorder(blackline);
 
-        JSplitPane RightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        RightPanel.setResizeWeight(1);
+        JPanel RightPanel = new JPanel();
+        RightPanel.setLayout(new BoxLayout(RightPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.add(LeftPanel);
-        mainPanel.add(RightPanel);
+        mainPanel.setLeftComponent(LeftPanel);
+        mainPanel.setRightComponent(RightPanel);
         panel.add(mainPanel);
 
-        JPanel daL = new JPanel();
-        daL.setAlignmentX(Component.LEFT_ALIGNMENT);
-        daL.add(daLabel);
-        LeftPanel.add(daL);
-
-        simGrid.setPreferredSize(new Dimension(15*map.getWidth(), 15*map.getHeight()));
+        simGrid.setPreferredSize(new Dimension(20*map.getWidth(), 20*map.getHeight()));
+        simGrid.setMinimumSize(new Dimension(20*map.getWidth(), 20*map.getHeight()));
         simGrid.setLayout(new GridLayout(map.getWidth(), map.getHeight()));
         simGrid.setBorder(blackline);
-//        simGrid.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         RightPanel.add(simGrid);
-
-        JPanel RightLowerPanel = new JPanel();
-        RightLowerPanel.setLayout(new BoxLayout(RightLowerPanel, BoxLayout.Y_AXIS));
 
         JPanel buttonPanel = new JPanel();
         JButton pauseButton = new JButton("Pause");
@@ -154,7 +144,7 @@ public class Simulation implements ActionListener {
         buttonPanel.add(pauseButton);
         buttonPanel.add(unpauseButton);
 
-        RightLowerPanel.add(buttonPanel);
+        RightPanel.add(buttonPanel);
 
         JPanel legend = new JPanel(new GridLayout(2, 2));
         legend.setPreferredSize(new Dimension(100, 100));
@@ -178,8 +168,8 @@ public class Simulation implements ActionListener {
         jungleSquare.setPreferredSize(new Dimension(20, 20));
         duneSquare.setPreferredSize(new Dimension(20, 20));
 
-        jungleSquare.setBackground(Color.orange);
-        duneSquare.setBackground(Color.blue);
+        jungleSquare.setBackground(new Color(70,150,90));
+        duneSquare.setBackground(new Color(252,252,3));
 
         jungle.add(jungleSquare);
         dune.add(duneSquare);
@@ -189,23 +179,43 @@ public class Simulation implements ActionListener {
         animal.add(new JLabel(" - Animal"));
         grass.add(new JLabel(" - Grass"));
 
+        jungle.setPreferredSize(new Dimension(100, 30));
+        dune.setPreferredSize(new Dimension(100, 30));
+        animal.setPreferredSize(new Dimension(100, 30));
+        grass.setPreferredSize(new Dimension(100, 30));
+
         legend.add(jungle);
         legend.add(dune);
         legend.add(animal);
         legend.add(grass);
 
-        RightLowerPanel.add(legend);
-        RightPanel.add(RightLowerPanel);
+        RightPanel.add(legend);
 
-        // add graphs to leftpanel
+        //LEFT PANEL
+
+        statsPanel = new Stats(map);
+        statsPanel.setBorder(blackline);
+
+        chart = new XYChartBuilder().width(600).height(400).title("Graph").xAxisTitle("Day").yAxisTitle("").build();
+        chart.getStyler().setMarkerSize(0);
+        JPanel chartPanel = new XChartPanel<org.knowm.xchart.XYChart>(chart);
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSW);
+
+        chart.addSeries("Animals", new double[] { 0 }, new double[] { 0 });
+        chart.addSeries("Grass", new double[] { 0 }, new double[] { 0 });
+        chart.addSeries("Free", new double[] { 0 }, new double[] { 0 });
+
+        chartPanel.setMaximumSize(new Dimension(9999, 500));
+
+        LeftPanel.add(chartPanel);
+        LeftPanel.add(statsPanel);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if(e.getActionCommand().equals("update")) {
-
-            panel.revalidate();
+            simGrid.revalidate();
             panel.repaint();
 
             map.removeDead(dayCount);
@@ -213,6 +223,10 @@ public class Simulation implements ActionListener {
             map.eatGrass();
             map.animalKids(dayCount);
             map.growGrass();
+
+            animalCount.add(map.getAnimalsCount());
+            grassCount.add(map.getGrassCount());
+            freeCount.add(map.getFreeSpaces());
 
             if(writeToCSV)
                 map.writeToCSV(filename, dayCount);
@@ -227,10 +241,10 @@ public class Simulation implements ActionListener {
                     temp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     temp.setPreferredSize(new Dimension(CELL,CELL));
                     if(map.isJungle(pos)) {
-                        temp.setBackground(Color.ORANGE);
+                        temp.setBackground(new Color(70,150,90));
                     }
                     else {
-                        temp.setBackground(Color.BLUE);
+                        temp.setBackground(new Color(252,252,3));
                     }
                     int id = map.isOccupied(pos);
                     if(id == 1){
@@ -247,12 +261,30 @@ public class Simulation implements ActionListener {
                 }
             }
 
+            statsPanel.setDay(dayCount);
+
             // refresh animal infos
             for(AnimalInfo AI : animalInfoList){
                 if(AI.isInfoActive()){
                     AI.refresh(dayCount);
                 }
             }
+
+            double[] animals = new double[dayCount];
+            double[] grass = new double[dayCount];
+            double[] free = new double[dayCount];
+            double[] days = new double[dayCount];
+
+            for(int i=0; i<dayCount; i++){
+                animals[i] = (double) animalCount.get(i);
+                grass[i] = (double) grassCount.get(i);
+                free[i] = (double) freeCount.get(i);
+                days[i] = i;
+            }
+
+            chart.updateXYSeries("Animals", days, animals, null);
+            chart.updateXYSeries("Grass", days, grass, null);
+            chart.updateXYSeries("Free", days, free, null);
 
             dayCount++;
 
@@ -270,7 +302,11 @@ public class Simulation implements ActionListener {
 
                         JButton button = new JButton();
 
-                        button.setBackground(Color.red);
+                        Animal animal = map.getAnimalAt(pos);
+
+                        int c = (int) ((double) animal.getCurrHealth() * 255 / (double) animal.getMaxHealth());
+
+                        button.setBackground(new Color(c, c, c));
 
                         button.addActionListener(new ActionListener() {
 
@@ -316,5 +352,10 @@ public class Simulation implements ActionListener {
         g2d.dispose();
         return bi;
     }
+
+    public int getDayCount() {
+        return dayCount;
+    }
+
 
 }

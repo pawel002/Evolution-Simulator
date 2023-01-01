@@ -16,6 +16,7 @@ javafx {
     modules = [ 'javafx.controls' ]
 }
 
+
 application {
     getMainClass().set('agh.ics.oop.World')
 }
@@ -29,6 +30,7 @@ java {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation group: 'org.knowm.xchart', name: 'xchart', version: '3.2.2'
 }
 
 test {

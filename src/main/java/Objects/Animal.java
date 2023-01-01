@@ -68,10 +68,6 @@ public class Animal {
         return birthDate;
     }
 
-    public int getGenomeIndex() {
-        return genomeIndex;
-    }
-
     public int getGenomeSize() {
         return genome.size();
     }
