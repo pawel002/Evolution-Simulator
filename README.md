@@ -1,4 +1,4 @@
-# OOP-Project
+# Evolution Simulator
 Evolution simulation for the Object Oriented Programming course at AGH University 2022/23.
 
 ## Authors
