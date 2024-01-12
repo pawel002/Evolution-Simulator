@@ -18,7 +18,7 @@ javafx {
 
 
 application {
-    getMainClass().set('agh.ics.oop.World')
+    getMainClass().set('Main')
 }
 
 java {
